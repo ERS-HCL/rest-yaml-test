@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+
+	<groupId>com.hcl.ers</groupId>
+	<artifactId>rest-yaml-test</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<gpg.skip>true</gpg.skip>
+		<e2e-lifecycle-mapping.version>1.0.0</e2e-lifecycle-mapping.version>
+		<sdk.java.rest>6.2.0.4</sdk.java.rest>
+		<jacoco.version>0.7.9</jacoco.version>
+		<pmd.version>3.8</pmd.version>
+		<findbugs.version>3.0.4</findbugs.version>
+		<jxr-plugin.version>2.3</jxr-plugin.version>
+		<junit.version>4.12</junit.version>
+		<assertj.version>3.8.0</assertj.version>
+		<gson.version>2.8.1</gson.version>
+		<groovy.version>2.4.12</groovy.version>
+		<logback.version>1.2.3</logback.version>
+		<config.version>1.3.1</config.version>
+		<restassured.version>2.9.0</restassured.version>
+		<jsonassert.version>1.5.0</jsonassert.version>
+		<skipUTs>true</skipUTs>
+		<gpg-plugin.version>1.6</gpg-plugin.version>
+		<surefire-plugin.version>2.12.4</surefire-plugin.version>
+		<failsafe-plugin.version>2.20</failsafe-plugin.version>
+		<snakeyaml.version>1.18</snakeyaml.version>
+		<guava.version>23.0</guava.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<json-io.version>4.9.12</json-io.version>
+		<jcabi-matchers.version>1.4</jcabi-matchers.version>
+		<jackson.version>2.9.0</jackson.version>
+	</properties>
+
+	<developers>
+		<developer>
+			<id>${userId}</id>
+		</developer>
+	</developers>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-yaml</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>${assertj.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.typesafe</groupId>
+			<artifactId>config</artifactId>
+			<version>${config.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jayway.restassured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${restassured.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.skyscreamer</groupId>
+			<artifactId>jsonassert</artifactId>
+			<version>${jsonassert.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>${gpg-plugin.version}</version>
+				<configuration>
+					<skip>${gpg.skip}</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire-plugin.version}</version>
+				<configuration>
+					<skipTests>${skipUTs}</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${failsafe-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<!-- mention the logback.xml location through system property or environment 
+			variable to edit logback.xml at run time -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>${basedir}/etc</directory>
+				<targetPath>${basedir}/target/etc</targetPath>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+</project>
