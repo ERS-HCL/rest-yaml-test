@@ -1,4 +1,4 @@
-package com.hcl.ers.util.itests.util;
+package com.hcl.ers.util.itests;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -6,6 +6,8 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.json.JSONException;
 import org.junit.Assert;
@@ -15,11 +17,12 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import com.hcl.ers.util.itests.AbstractITest;
 import com.hcl.ers.util.itests.beans.InitGroup;
 import com.hcl.ers.util.itests.beans.JsonAssert;
 import com.hcl.ers.util.itests.beans.RestTest;
 import com.hcl.ers.util.itests.beans.TestGroup;
+import com.hcl.ers.util.itests.util.JsonMapper;
+import com.hcl.ers.util.itests.util.TestException;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
 
@@ -57,9 +60,9 @@ public class MainTest extends AbstractITest {
 			Response response = request(rs, test);
 			
 			Assert.assertThat(response.statusCode(), equalTo(test.getResponse().getStatus()));
-			bodyAssert(response, test);
 			headersAssert(response, test);
 			cookiesAssert(response, test);
+			bodyAssert(response, test);
 		}
 	}
 	
@@ -85,15 +88,7 @@ public class MainTest extends AbstractITest {
 		}
 	}
 	
-	private void replaceVariableValue(Map<String, String> map) {
-		for(Map.Entry<String, String> entry: map.entrySet()) {
-			if(entry.getValue().startsWith("$")) {
-				String variable = entry.getValue().substring(1);
-				String value = initGroup.getVariables().get(variable);
-				map.put(entry.getKey(), value);
-			}
-		}
-	}
+
 	
 	
 	private void addBody(RequestSpecification rs, RestTest test) {
@@ -105,16 +100,17 @@ public class MainTest extends AbstractITest {
 	private Response request(RequestSpecification rs, RestTest test) {
 		
 		final Response response;
+		String uri = replaceVariableValue(test.getRequest().getUri());
 		
 		if(test.getRequest().getMethod().equalsIgnoreCase("get")) {
-			response = rs.get(test.getRequest().getUri());
+			response = rs.get(uri);
 		} else if (test.getRequest().getMethod().equalsIgnoreCase("post")) {
-			response = rs.post(test.getRequest().getUri());
+			response = rs.post(uri);
 			
 		} else if (test.getRequest().getMethod().equalsIgnoreCase("put")) {
-			response = rs.put(test.getRequest().getUri());
+			response = rs.put(uri);
 		} else if (test.getRequest().getMethod().equalsIgnoreCase("delete")) {
-			response = rs.delete(test.getRequest().getUri());
+			response = rs.delete(uri);
 		} else {
 			throw new TestException("Request method is not get, post, put and delete for testGroup="+ 
 									testGroup.getName()+
@@ -124,16 +120,41 @@ public class MainTest extends AbstractITest {
 		return response;
 	}
 	
+	private void replaceVariableValue(Map<String, String> map) {
+		for(Map.Entry<String, String> entry: map.entrySet()) {
+			map.put(entry.getKey(), replaceVariableValue(entry.getValue()));
+		}
+	}
+	
+	private String replaceVariableValue(String input) {
+		Pattern p = Pattern.compile("\\$\\{[a-zA-Z][a-zA-Z0-9_\\-]*\\}");
+		Matcher m = p.matcher(input);
+		
+		String output = input;
+		while(m.find()) {
+			String matched = m.group();
+			String variable = matched.substring(2, matched.length()-1);
+			String value = initGroup.getVariables().get(variable);
+			if(value == null ) {
+				value="null";
+			}
+			output = m.replaceFirst(value);
+			m = p.matcher(output);
+		}
+		 
+		return output;
+	}
+	
 	private void headersAssert(Response response, RestTest test) {
 		if(test.getResponse().getHeaders() != null) {
 			for(Map.Entry<String, String> entry: test.getResponse().getHeaders().entrySet()) {
 				if(entry.getKey().startsWith("$")) {
 					String variable = entry.getKey().substring(1);
-					String value = response.getHeader(variable);
+					String value = response.getHeader(entry.getValue());
 					initGroup.getVariables().put(variable, value);
-				} else {
+				}  else {
 					String actual = response.getHeader(entry.getKey());
-					String expected = entry.getValue();
+					String expected = replaceVariableValue(entry.getValue());
 					Assert.assertThat(actual, equalTo(expected));
 				}
 			}
@@ -145,11 +166,11 @@ public class MainTest extends AbstractITest {
 			for(Map.Entry<String, String> entry: test.getResponse().getCookies().entrySet()) {
 				if(entry.getKey().startsWith("$")) {
 					String variable = entry.getKey().substring(1);
-					String value = response.getCookie(variable);
+					String value = response.getCookie(entry.getValue());
 					initGroup.getVariables().put(variable, value);
 				} else {
 					String actual = response.getCookie(entry.getKey());
-					String expected = entry.getValue();
+					String expected = replaceVariableValue(entry.getValue());
 					Assert.assertThat(actual, equalTo(expected));
 				}
 			}

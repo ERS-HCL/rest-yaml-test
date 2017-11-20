@@ -15,7 +15,7 @@ testGroup:
              foo: foo1
              baz: baz1
            headers: 
-             content-type: $content-type
+             content-type: ${content-type}
              uuid: uuid-1
            cookies:
              cookie1: kookie1
@@ -65,4 +65,4 @@ testGroup:
                   value: "httpbin.org"
                -
                   jsonPath: headers.Uuid
-                  value: uuid-1                     
+                  value: uuid-1
