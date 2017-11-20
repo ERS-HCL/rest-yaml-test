@@ -6,6 +6,7 @@ public class Response {
 
 	private Map<String, String> headers;
 	private Map<String, String> cookies;
+	private Map<String, String> variables;
 	private ResponseBody body;
 	private int status;
 	
@@ -40,6 +41,14 @@ public class Response {
 
 	public void setCookies(Map<String, String> cookies) {
 		this.cookies = cookies;
+	}
+
+	public Map<String, String> getVariables() {
+		return variables;
+	}
+
+	public void setVariables(Map<String, String> variables) {
+		this.variables = variables;
 	}
 
 }

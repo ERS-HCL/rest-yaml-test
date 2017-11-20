@@ -8,6 +8,7 @@ testGroup:
     name: simple test to show uri, method, parameters, headers and cookies usages
     tests:
       -
+         name: simple test 1
          request:
            uri: "/get"
            method: get
@@ -30,11 +31,11 @@ testGroup:
            status: 200
            headers:
              content-type: "application/json"
-
   -
     name: test to show to show how to test body asserts
     tests:
       -
+         name: simple test 2
          request:
            uri: "/get?foo=v1&foo=v2"
            method: get
@@ -43,8 +44,9 @@ testGroup:
              uuid: uuid-1
          response:
            status: 200
-           headers:
-             $contentType: content-type
+           variables:
+             contentType: header.content-type
+             uuid: body.headers.Uuid
            body:
              asserts:
                -

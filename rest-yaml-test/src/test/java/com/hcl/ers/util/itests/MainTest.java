@@ -37,9 +37,6 @@ public class MainTest extends AbstractITest {
 		return getTestGroupData();
 	}
 
-	/**
-	 * Setup.
-	 */
 	@Before
 	public void setUp() {
 		super.setUp();
@@ -49,6 +46,7 @@ public class MainTest extends AbstractITest {
 	@Test
 	public void testWithRestAssured() throws Exception {
 		for (RestTest test : testGroup.getTests()) {
+			System.out.println("--->start test "+testGroup.getName()+"->"+test.getName());
 			
 			RequestSpecification rs = given().spec(rspec);
 		
@@ -63,6 +61,9 @@ public class MainTest extends AbstractITest {
 			headersAssert(response, test);
 			cookiesAssert(response, test);
 			bodyAssert(response, test);
+			assignVariableValue(response, test);
+			
+			System.out.println("end test "+testGroup.getName()+"->"+test.getName());
 		}
 	}
 	
@@ -88,9 +89,6 @@ public class MainTest extends AbstractITest {
 		}
 	}
 	
-
-	
-	
 	private void addBody(RequestSpecification rs, RestTest test) {
 		if(test.getRequest().getBody() != null) {
 			rs.body(test.getRequest().getBody());
@@ -98,7 +96,6 @@ public class MainTest extends AbstractITest {
 	}
 	
 	private Response request(RequestSpecification rs, RestTest test) {
-		
 		final Response response;
 		String uri = replaceVariableValue(test.getRequest().getUri());
 		
@@ -141,43 +138,61 @@ public class MainTest extends AbstractITest {
 			output = m.replaceFirst(value);
 			m = p.matcher(output);
 		}
-		 
+		
+		if(!input.equals(output)) {
+			System.out.println("string "+input+" replaced by "+output);
+		}
+		
 		return output;
 	}
 	
-	private void headersAssert(Response response, RestTest test) {
-		if(test.getResponse().getHeaders() != null) {
-			for(Map.Entry<String, String> entry: test.getResponse().getHeaders().entrySet()) {
-				if(entry.getKey().startsWith("$")) {
-					String variable = entry.getKey().substring(1);
-					String value = response.getHeader(entry.getValue());
+	private void assignVariableValue (Response response, RestTest test) {
+		if(test.getResponse().getVariables() != null) {
+			for(Map.Entry<String, String> entry: test.getResponse().getVariables().entrySet()) {
+				if(entry.getValue().startsWith("header.")) {
+					String variable = entry.getKey();
+					String value = response.getHeader(entry.getValue().substring(7));
+					System.out.println("variable value from header " + variable+"="+value);
 					initGroup.getVariables().put(variable, value);
-				}  else {
-					String actual = response.getHeader(entry.getKey());
-					String expected = replaceVariableValue(entry.getValue());
-					Assert.assertThat(actual, equalTo(expected));
+				} else if (entry.getValue().startsWith("cookie.")) {
+					String variable = entry.getKey();
+					String value = response.getCookie(entry.getValue().substring(7));
+					initGroup.getVariables().put(variable, value);
+					System.out.println("variable value from cookie " + variable+"="+value);
+				} else if (entry.getValue().startsWith("body.")) {
+					String variable = entry.getKey();
+					String value = response.body().jsonPath().getString(entry.getValue().substring(5));
+					System.out.println("variable value from body " + variable+"="+value);
+					initGroup.getVariables().put(variable, value);
 				}
+			}
+		}
+	}
+	
+	private void headersAssert(Response response, RestTest test) {
+		System.out.println("response headers = "+response.getHeaders());
+		if (test.getResponse().getHeaders() != null) {
+			for (Map.Entry<String, String> entry : test.getResponse().getHeaders().entrySet()) {
+				String actual = response.getHeader(entry.getKey());
+				String expected = replaceVariableValue(entry.getValue());
+				Assert.assertThat(actual, equalTo(expected));
 			}
 		}
 	}
 		
 	private void cookiesAssert(Response response, RestTest test) {
-		if(test.getResponse().getCookies() != null) {
-			for(Map.Entry<String, String> entry: test.getResponse().getCookies().entrySet()) {
-				if(entry.getKey().startsWith("$")) {
-					String variable = entry.getKey().substring(1);
-					String value = response.getCookie(entry.getValue());
-					initGroup.getVariables().put(variable, value);
-				} else {
-					String actual = response.getCookie(entry.getKey());
-					String expected = replaceVariableValue(entry.getValue());
-					Assert.assertThat(actual, equalTo(expected));
-				}
+		System.out.println("response cookies = "+response.getCookies());
+		if (test.getResponse().getCookies() != null) {
+			for (Map.Entry<String, String> entry : test.getResponse().getCookies().entrySet()) {
+				String actual = response.getCookie(entry.getKey());
+				String expected = replaceVariableValue(entry.getValue());
+				Assert.assertThat(actual, equalTo(expected));
 			}
 		}
 	}
 	
 	private void bodyAssert(Response response, RestTest test) throws JSONException {
+		System.out.println("response body = "+response.asString());
 		if(test.getResponse().getBody() != null &&  test.getResponse().getBody().getAsserts() != null) {
 			for(JsonAssert jsonAssert: test.getResponse().getBody().getAsserts()) {
 				Object value = response.body().jsonPath().get(jsonAssert.getJsonPath());
