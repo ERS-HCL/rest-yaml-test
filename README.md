@@ -98,7 +98,7 @@ This is a Java Maven project. Follow these steps.
 				   header: # create key value pairs of headers and its values
 				     content-type: {$contentType}
 				   cookie: # create key value pairs of cookies and its values
-				   body: | # send following json as request payload.
+				   body: | # send following json as request payload
 				      {
 					    "a":"b",
 						"c":"d"
@@ -106,17 +106,17 @@ This is a Java Maven project. Follow these steps.
 				   response:
 				     status: {$status} # assert that http response status is 200
 				     header: # add key value pairs to assert on header values
-				      content-type: {$contentType} #assert that content-type header is application/json
+				       content-type: {$contentType} #assert that content-type header value
 					 body:
-                       asserts: # add multiple assert key value pairs 
+                       asserts: # add multiple assert key value pairs
 					    -
-                          jsonPath: args.foo # json path expression to be used to get value from response body
-                          value: "v1,v2" # if the return value from json path is list of atomic values you can match them with comma separated values like this.
+                           jsonPath: args.foo # json path expression to be used to get value from response body
+                           value: "v1,v2" # if the return value from json path is list of atomic values you can match them with comma separated values like this.
 						  
                         -
-                          jsonPath: args # json path expression
-                          match: strict # if the return value from json path is json then JsonAssert is used to match expected and actual values refer http://jsonassert.skyscreamer.org/cookbook.html
-                          value: | # expected json value
+                           jsonPath: args # json path expression
+                           match: strict # if the return value from json path is json then JsonAssert is used to match expected and actual values refer http://jsonassert.skyscreamer.org/cookbook.html
+                           value: | # expected json value
                               {
                                 "foo": [
                                    "v1",
