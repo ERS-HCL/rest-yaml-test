@@ -5,7 +5,7 @@ initGroup:
        
 testGroup:
   -
-    name: simple test to show uri, method, parameters, headers and cookies usages
+    name: test group to show uri, method, parameters, headers and cookies usages
     tests:
       -
          name: simple test 1
@@ -32,10 +32,10 @@ testGroup:
            headers:
              content-type: "application/json"
   -
-    name: test to show to show how to test body asserts
+    name: test group to show to show how to test body asserts
     tests:
       -
-         name: simple test 2
+         name: simple body asset test
          request:
            uri: "/get?foo=v1&foo=v2"
            method: get
@@ -74,7 +74,7 @@ testGroup:
     skip: true
     tests:
       -
-         name: simple test 2
+         name: simple test
          request:
            uri: "/get?foo=v1&foo=v2"
            method: get
