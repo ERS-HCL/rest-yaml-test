@@ -11,10 +11,11 @@ This is a Java Maven project. Follow these steps.
 5. If you want to run test from eclipse then right click "MainTest" class and run it as junit test.
 
 #How to write test cases?
-### Please read "src/test/resources/test-data-dev.yaml" test case file.
-### Define variables. Variables can be defined inside the initGroup and they have global scope. that means you use these variables anywhere. You can reference these variables like ${variableName} to assign values to a header, a cookie and in a request uri. You can also assign values to these variables from REST response and refer the value in subsequent tests.
-    Example:
-	a. define variables
+- Please read "src/test/resources/test-data-dev.yaml" test case file.
+- Define variables. Variables can be defined inside the initGroup and they have global scope. that means you use these variables anywhere. You can reference these variables like ${variableName} to assign values to a header, a cookie and in a request uri. You can also assign values to these variables from REST response and refer the value in subsequent tests.
+  - Example:
+    - define variables
+	
 ```
 	    initGroup:
 		  variables:
@@ -24,7 +25,9 @@ This is a Java Maven project. Follow these steps.
 			 uuid: # create uuid variable with null value
 			 country: US
 ```
-	b. use variables
+
+	- use variables
+
 ```
 	    testGroup:
 		  -
@@ -43,7 +46,9 @@ This is a Java Maven project. Follow these steps.
 				  header:
 				    content-type: {$contentType} #assert that content-type header is application/json
 ```				
-	c. assign value to a variable from response.
+
+	- assign value to a variable from response.
+	
 ```
 	    testGroup:
 		  -
@@ -61,9 +66,10 @@ This is a Java Maven project. Follow these steps.
 					skuId: body.response.skuId # assign value extracted from json response using "response.skuId" JsonPath expression for json path expression refer https://github.com/json-path/JsonPath
 ```
 
-### Create testGroup. You can create multiple testGroups one for each test scenerio. One testGroup can have multiple REST requests defined as test inside the testGroup. 
-   Examples:
-      a. Create test groups
+- Create testGroup. You can create multiple testGroups one for each test scenerio. One testGroup can have multiple REST requests defined as test inside the testGroup. 
+  - Examples:
+    - Create test groups
+	
 ```	  
 	     testGroup:
 		   -
@@ -75,7 +81,9 @@ This is a Java Maven project. Follow these steps.
 			  skip: false
 		   .....
 ```
-	   b. Create tests
+
+	- Create tests
+	
 ```          
           testGroup:
             -
@@ -118,4 +126,5 @@ This is a Java Maven project. Follow these steps.
                         -
                            jsonPath: headers.Host #json path expression
                            value: "httpbin.org" #if the json path returns single value then you can match it like this.
+
 ```
