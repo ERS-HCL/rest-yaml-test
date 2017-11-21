@@ -68,3 +68,42 @@ testGroup:
                -
                   jsonPath: headers.Uuid
                   value: uuid-1
+                  
+  -
+    name: show how to skip test group
+    skip: true
+    tests:
+      -
+         name: simple test 2
+         request:
+           uri: "/get?foo=v1&foo=v2"
+           method: get
+           headers: 
+             content-type: "application/json"
+             uuid: uuid-1
+         response:
+           status: 200
+           variables:
+             contentType: header.content-type
+             uuid: body.headers.Uuid
+           body:
+             asserts:
+               -
+                  jsonPath: args.foo
+                  value: "v1,v2"
+               -
+                  jsonPath: args
+                  match: strict
+                  value: |
+                    {
+                      "foo": [
+                               "v1",
+                               "v2"
+                             ]
+                    }
+               -
+                  jsonPath: headers.Host
+                  value: "httpbin.org"
+               -
+                  jsonPath: headers.Uuid
+                  value: uuid-1                  

@@ -45,8 +45,18 @@ public class MainTest extends AbstractITest {
 
 	@Test
 	public void testWithRestAssured() throws Exception {
+		if(testGroup.isSkip()) {
+			System.out.println("->skipped test group "+testGroup.getName());
+			return;
+		}
+		
 		for (RestTest test : testGroup.getTests()) {
-			System.out.println("--->start test "+testGroup.getName()+"->"+test.getName());
+			
+			if(test.isSkip()) {
+				System.out.println("-->skipped test "+testGroup.getName()+"->"+test.getName());
+			}
+			
+			System.out.println("-->start test "+testGroup.getName()+"->"+test.getName());
 			
 			RequestSpecification rs = given().spec(rspec);
 		
@@ -63,7 +73,7 @@ public class MainTest extends AbstractITest {
 			bodyAssert(response, test);
 			assignVariableValue(response, test);
 			
-			System.out.println("end test "+testGroup.getName()+"->"+test.getName());
+			System.out.println("-->end test "+testGroup.getName()+"->"+test.getName());
 		}
 	}
 	
