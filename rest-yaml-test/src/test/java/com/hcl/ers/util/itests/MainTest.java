@@ -30,7 +30,7 @@ public class MainTest extends AbstractITest {
 
 	@Parameter(value = 0)
 	public TestGroup testGroup;
-    public InitGroup initGroup;
+    public static InitGroup initGroup;
     
 	@Parameters(name = "{index}: test - {0} ")
 	public static List<TestGroup> data() throws Exception {
@@ -40,7 +40,10 @@ public class MainTest extends AbstractITest {
 	@Before
 	public void setUp() {
 		super.setUp();
-		this.initGroup = getInitGroupData();
+		
+		if(initGroup == null) {
+			this.initGroup = getInitGroupData();
+		}
 	}
 
 	@Test
