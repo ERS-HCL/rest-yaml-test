@@ -3,14 +3,14 @@ Test your REST API by writing test data in YAML only without writing any code.
 # How to start?
 This is a Java Maven project. Follow these steps.
 1. Import this project into your eclipse workspace.
-2. 1. A new test data file is required for each environment if you want to run your tests against different environments e.g. dev, test
+2. A new test data file is required for each environment if you want to run your tests against different environments e.g. dev, test
 3. Test data file name should be in "test-data-<environment-name>.yaml" format where "environment-name" is the name of environment.
 4. Create new application configuration file with "application-<environment-name>.properties" and change "server.port", "server.baseURI".
 3. Write test data into "test-data-<environment-name>.yaml"
 4. mvn clean verify <environment-name> from command window.
 5. If you want to run test from eclipse then right click "MainTest" class and run it as junit test.
 
-#How to write test cases?
+# How to write test cases?
 - Please read "src/test/resources/test-data-dev.yaml" test case file.
 - Define variables. Variables can be defined inside the initGroup and they have global scope. that means you use these variables anywhere. You can reference these variables like ${variableName} to assign values to a header, a cookie and in a request uri. You can also assign values to these variables from REST response and refer the value in subsequent tests.
   - Example:
@@ -26,7 +26,7 @@ This is a Java Maven project. Follow these steps.
 			 country: US
 ```
 
-	- use variables
+    - use variables
 
 ```
 	    testGroup:
@@ -47,7 +47,7 @@ This is a Java Maven project. Follow these steps.
 				    content-type: {$contentType} #assert that content-type header is application/json
 ```				
 
-	- assign value to a variable from response.
+    - assign value to a variable from response.
 	
 ```
 	    testGroup:
@@ -82,7 +82,7 @@ This is a Java Maven project. Follow these steps.
 		   .....
 ```
 
-	- Create tests
+    - Create tests
 	
 ```          
           testGroup:
