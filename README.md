@@ -55,3 +55,59 @@ How to write test cases?
 				    uuid: header.uuid # assign uuid header value to uuid variable defined in the initGroup. if variable not defined new variable will be created.
 					sessionId:  cookie.session-id # assign session-id cookie value to sessionId variable.
 					skuId: body.response.skuId # assign value extracted from json response using "response.skuId" JsonPath expression for json path expression refer https://github.com/json-path/JsonPath
+
+3. Create testGroup. You can create multiple testGroups one for each test scenerio. One testGroup can have multiple REST requests defined as test inside the testGroup. 
+   Examples:
+      a. Create test groups
+	     testGroup:
+		   -
+			  name: first test group
+		      skip: true/false #if you want to skip this testGroup from execution set value to true/false
+			
+		   -
+		      name: second test group
+			  skip: false
+		   .....
+	   b. Create tests
+          
+          testGroup:
+            -
+             ....
+             tests:
+               -
+                 name: first rest request
+                 request:
+                   uri: /cart/get/cart/${cartId} # request uri hostname and port is picked up from baseURI from
+				   method: get/post/put/delete # use any of these values
+				   application.properties file.
+				   header: # create key value pairs of headers and its values
+				     content-type: {$contentType}
+				   cookie: # create key value pairs of cookies and its values
+				   body: | # send following json as request payload.
+				      {
+					    "a":"b",
+						"c":"d"
+					  }
+				   response:
+				     status: {$status} # assert that http response status is 200
+				     header: # add key value pairs to assert on header values
+				      content-type: {$contentType} #assert that content-type header is application/json
+					 body:
+                       asserts: # add multiple assert key value pairs 
+					    -
+                          jsonPath: args.foo # json path expression to be used to get value from response body
+                          value: "v1,v2" # if the return value from json path is list of atomic values you can match them with comma separated values like this.
+						  
+                        -
+                          jsonPath: args # json path expression
+                          match: strict # if the return value from json path is json then JsonAssert is used to match expected and actual values refer http://jsonassert.skyscreamer.org/cookbook.html
+                          value: | # expected json value
+                              {
+                                "foo": [
+                                   "v1",
+                                   "v2"
+                                ]
+                              }
+                        -
+                           jsonPath: headers.Host #json path expression
+                           value: "httpbin.org" #if the json path returns single value then you can match it like this.
