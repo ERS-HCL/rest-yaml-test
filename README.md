@@ -1,6 +1,6 @@
 Test your REST API by writing test data in YAML only without writing any code.
 
-How to start?
+# How to start?
 This is a Java Maven project. Follow these steps.
 1. Import this project into your eclipse workspace.
 2. 1. A new test data file is required for each environment if you want to run your tests against different environments e.g. dev, test
@@ -10,11 +10,12 @@ This is a Java Maven project. Follow these steps.
 4. mvn clean verify <environment-name> from command window.
 5. If you want to run test from eclipse then right click "MainTest" class and run it as junit test.
 
-How to write test cases?
-1. Please read "src/test/resources/test-data-dev.yaml" test case file.
-2. Define variables. Variables can be defined inside the initGroup and they have global scope. that means you use these variables anywhere. You can reference these variables like ${variableName} to assign values to a header, a cookie and in a request uri. You can also assign values to these variables from REST response and refer the value in subsequent tests.
+#How to write test cases?
+### Please read "src/test/resources/test-data-dev.yaml" test case file.
+### Define variables. Variables can be defined inside the initGroup and they have global scope. that means you use these variables anywhere. You can reference these variables like ${variableName} to assign values to a header, a cookie and in a request uri. You can also assign values to these variables from REST response and refer the value in subsequent tests.
     Example:
 	a. define variables
+```
 	    initGroup:
 		  variables:
 		     status: 200 #status variable is created with intial value of 200 
@@ -22,7 +23,9 @@ How to write test cases?
 			 cartId: cid-1001
 			 uuid: # create uuid variable with null value
 			 country: US
+```
 	b. use variables
+```
 	    testGroup:
 		  -
 		    name: ....
@@ -39,8 +42,9 @@ How to write test cases?
 				  status: {$status} # assert that http response status is 200
 				  header:
 				    content-type: {$contentType} #assert that content-type header is application/json
-					
+```				
 	c. assign value to a variable from response.
+```
 	    testGroup:
 		  -
 		    name: ....
@@ -55,10 +59,12 @@ How to write test cases?
 				    uuid: header.uuid # assign uuid header value to uuid variable defined in the initGroup. if variable not defined new variable will be created.
 					sessionId:  cookie.session-id # assign session-id cookie value to sessionId variable.
 					skuId: body.response.skuId # assign value extracted from json response using "response.skuId" JsonPath expression for json path expression refer https://github.com/json-path/JsonPath
+```
 
-3. Create testGroup. You can create multiple testGroups one for each test scenerio. One testGroup can have multiple REST requests defined as test inside the testGroup. 
+### Create testGroup. You can create multiple testGroups one for each test scenerio. One testGroup can have multiple REST requests defined as test inside the testGroup. 
    Examples:
       a. Create test groups
+```	  
 	     testGroup:
 		   -
 			  name: first test group
@@ -68,8 +74,9 @@ How to write test cases?
 		      name: second test group
 			  skip: false
 		   .....
+```
 	   b. Create tests
-          
+```          
           testGroup:
             -
              ....
@@ -111,3 +118,4 @@ How to write test cases?
                         -
                            jsonPath: headers.Host #json path expression
                            value: "httpbin.org" #if the json path returns single value then you can match it like this.
+```
