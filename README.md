@@ -4,9 +4,9 @@ Test your REST API by writing test data in YAML only without writing any code.
 This is a Java Maven project. Follow these steps.
 - Import this project into your eclipse workspace.
 - Create one or more test data files for each environment if you want to run your tests against different environments e.g. dev, test
-- Create new application configuration file with "application-<environment-name>.properties" and change "server.port", "server.baseURI" "testFiles" properties value.
+- Create new application configuration file with "application-environment-name.properties" where "environment-name" is the name of environment and change "server.port", "server.baseURI" "testFiles" properties value.
 - Write test cases in the format give below.
-- Run "mvn clean verify <environment-name>" from command window.
+- Run "mvn clean verify {environment-name}" from command window where "environment-name" is the name of environment.
 - If you want to run test from eclipse then right click "MainTest" class and run it as junit test.
 
 # How to write test cases?
