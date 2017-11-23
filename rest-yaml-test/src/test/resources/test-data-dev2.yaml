@@ -1,8 +1,3 @@
-initGroup:
-  variables:
-       content-type: "application/json"
-       uuid:
-       
 testGroup:
   -
     name: test group to show uri, method, parameters, headers and cookies usages
@@ -106,4 +101,4 @@ testGroup:
                   value: "httpbin.org"
                -
                   jsonPath: headers.Uuid
-                  value: uuid-1                                    
+                  value: uuid-1                  

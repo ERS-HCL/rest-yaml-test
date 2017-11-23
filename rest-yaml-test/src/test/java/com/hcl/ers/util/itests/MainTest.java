@@ -57,6 +57,7 @@ public class MainTest extends AbstractITest {
 			
 			if(test.isSkip()) {
 				System.out.println("-->skipped test "+testGroup.getName()+"->"+test.getName());
+				continue;
 			}
 			
 			System.out.println("-->start test "+testGroup.getName()+"->"+test.getName());
