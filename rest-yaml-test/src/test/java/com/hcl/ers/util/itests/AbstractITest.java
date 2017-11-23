@@ -52,7 +52,11 @@ public abstract class AbstractITest {
 	}
 	
 	public static List<TestGroup> getTestGroupData() {
+		long startTime = System.currentTimeMillis();
 		List<TestGroup> groups = JsonMapper.toObject(testData.getTestData().getObject("testGroup", List.class), TestGroup.class);
+		long endTime = System.currentTimeMillis();
+		
+		System.out.println("total testGroup count="+groups.size()+" yaml parsing time in millis="+(endTime-startTime));
 		return groups;
 	}
 	

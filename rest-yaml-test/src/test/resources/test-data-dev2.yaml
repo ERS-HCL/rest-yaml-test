@@ -1,4 +1,3 @@
-testGroup:
   -
     name: test group to show uri, method, parameters, headers and cookies usages
     tests:
@@ -102,3 +101,4 @@ testGroup:
                -
                   jsonPath: headers.Uuid
                   value: uuid-1                  
+                

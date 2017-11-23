@@ -32,6 +32,8 @@ public class MainTest extends AbstractITest {
 	public TestGroup testGroup;
     public static InitGroup initGroup;
     
+    public static int testGroupCount=0;
+    
 	@Parameters(name = "{index}: test - {0} ")
 	public static List<TestGroup> data() throws Exception {
 		return getTestGroupData();
@@ -48,19 +50,24 @@ public class MainTest extends AbstractITest {
 
 	@Test
 	public void testWithRestAssured() throws Exception {
+		testGroupCount = testGroupCount+1;
 		if(testGroup.isSkip()) {
-			System.out.println("->skipped test group "+testGroup.getName());
+			System.out.println("->skipped testGroup name="+testGroup.getName()+" testGroup count="+testGroupCount);
 			return;
 		}
 		
+		System.out.println("->star testGroup name="+testGroup.getName()+" testGroup count="+testGroupCount);
+		
+		int testCount = 0;
 		for (RestTest test : testGroup.getTests()) {
 			
+			testCount = testCount+1;
 			if(test.isSkip()) {
-				System.out.println("-->skipped test "+testGroup.getName()+"->"+test.getName());
+				System.out.println("-->skipped test ="+test.getName()+" , test count="+testCount);
 				continue;
 			}
 			
-			System.out.println("-->start test "+testGroup.getName()+"->"+test.getName());
+			System.out.println("-->start test ="+test.getName()+" , test count="+testCount);
 			
 			RequestSpecification rs = given().spec(rspec);
 		
@@ -77,7 +84,7 @@ public class MainTest extends AbstractITest {
 			bodyAssert(response, test);
 			assignVariableValue(response, test);
 			
-			System.out.println("-->end test "+testGroup.getName()+"->"+test.getName());
+			System.out.println("-->end test ="+test.getName()+" ,test count="+testCount);
 		}
 	}
 	
