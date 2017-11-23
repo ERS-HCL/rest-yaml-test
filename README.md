@@ -4,16 +4,17 @@ Test your REST API by writing test data in YAML only without writing any code.
 This is a Java Maven project. Follow these steps.
 - Import this project into your eclipse workspace.
 - Create one or more test data files for each environment if you want to run your tests against different environments e.g. dev, test
-- Create new application configuration file with "application-environment-name.properties" where "environment-name" is the name of environment and change "server.port", "server.baseURI" "testFiles" properties value.
+- Create new application configuration file with "application-environment-name.properties" where "environment-name" is the name of environment and change "server.port", "server.baseURI" and "testFiles" properties value.
 - Write test cases in the format give below.
 - Run "mvn clean verify {environment-name}" from command window where "environment-name" is the name of environment.
 - If you want to run test from eclipse then right click "MainTest" class and run it as junit test.
 
 # How to write test cases?
 - Please read "src/test/resources/test-data-dev.yaml" test case file.
-- Define variables. Variables can be defined inside the initGroup and they have global scope. that means you use these variables anywhere. You can reference these variables like ${variableName} to assign values to a header, a cookie and in a request uri. You can also assign values to these variables from REST response and refer the value in subsequent tests.
+- Define variables. 
+  Variables can be defined inside the initGroup and they have global scope. that means you use these variables anywhere. You can reference these variables like ${variableName} to assign values to a header, a cookie and in a request uri. You can also assign values to these variables from REST response and refer the value in subsequent tests.
 - Example:
-- define variables
+  - define variables
 
 ```
 initGroup:
@@ -25,7 +26,7 @@ initGroup:
     country: US
 ```
 
-- use variables
+  - use variables
 
 ```
 testGroup:
@@ -45,7 +46,7 @@ testGroup:
               content-type: {$contentType} #assert that content-type header is application/json
 ```
 
-- assign value to a variable from response.
+  - assign value to a variable from response.
 ```
 testGroup:
   -
@@ -65,7 +66,7 @@ testGroup:
 
 - Create testGroup. You can create multiple testGroups one for each test scenerio. One testGroup can have multiple REST requests defined as test inside the testGroup. 
 - Examples:
-- Create test groups
+  - Create test groups
 
 ```
 testGroup:
@@ -78,7 +79,7 @@ testGroup:
      .....
 ```
 
-- Create tests
+  - Create tests
 
 ```
 testGroup:
