@@ -2,7 +2,7 @@ package com.hcl.ers.util.itests.beans;
 
 import java.util.Map;
 
-public class Request {
+public class YamlRequest {
 
 	private String uri;
 	private String method;

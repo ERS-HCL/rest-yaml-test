@@ -1,11 +1,12 @@
 package com.hcl.ers.util.itests.beans;
 
-public class RestTest {
+public class YamlTest {
 
 	private String name;
 	private boolean skip;
-	private Request request;
-	private Response response;
+	private boolean log;
+	private YamlRequest request;
+	private YamlResponse response;
 
 	public String getName() {
 		return name;
@@ -15,19 +16,19 @@ public class RestTest {
 		this.name = name;
 	}
 
-	public Request getRequest() {
+	public YamlRequest getRequest() {
 		return request;
 	}
 
-	public void setRequest(Request request) {
+	public void setRequest(YamlRequest request) {
 		this.request = request;
 	}
 
-	public Response getResponse() {
+	public YamlResponse getResponse() {
 		return response;
 	}
 
-	public void setResponse(Response response) {
+	public void setResponse(YamlResponse response) {
 		this.response = response;
 	}
 
@@ -37,6 +38,14 @@ public class RestTest {
 
 	public void setSkip(boolean skip) {
 		this.skip = skip;
+	}
+
+	public boolean isLog() {
+		return log;
+	}
+
+	public void setLog(boolean log) {
+		this.log = log;
 	}
 	
 }

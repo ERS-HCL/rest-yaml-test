@@ -2,17 +2,19 @@ package com.hcl.ers.util.itests.beans;
 
 import java.util.List;
 
-public class TestGroup {
+public class YamlTestGroup {
 	
 	private String name;
 	private boolean skip;
-	private List<RestTest> tests;
+	private boolean log;
+	
+	private List<YamlTest> tests;
 
-	public List<RestTest> getTests() {
+	public List<YamlTest> getTests() {
 		return tests;
 	}
 
-	public void setTests(List<RestTest> tests) {
+	public void setTests(List<YamlTest> tests) {
 		this.tests = tests;
 	}
 
@@ -32,4 +34,12 @@ public class TestGroup {
 		this.skip = skip;
 	}
 
+	public boolean isLog() {
+		return log;
+	}
+
+	public void setLog(boolean log) {
+		this.log = log;
+	}
+	
 }

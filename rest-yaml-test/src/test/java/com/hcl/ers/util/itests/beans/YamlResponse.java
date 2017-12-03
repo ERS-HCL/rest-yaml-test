@@ -2,12 +2,12 @@ package com.hcl.ers.util.itests.beans;
 
 import java.util.Map;
 
-public class Response {
+public class YamlResponse {
 
 	private Map<String, String> headers;
 	private Map<String, String> cookies;
 	private Map<String, String> variables;
-	private ResponseBody body;
+	private YamlResponseBody body;
 	private int status;
 	
 	
@@ -19,11 +19,11 @@ public class Response {
 		this.headers = headers;
 	}
 
-	public ResponseBody getBody() {
+	public YamlResponseBody getBody() {
 		return body;
 	}
 
-	public void setBody(ResponseBody body) {
+	public void setBody(YamlResponseBody body) {
 		this.body = body;
 	}
 

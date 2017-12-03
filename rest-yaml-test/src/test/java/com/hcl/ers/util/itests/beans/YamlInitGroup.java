@@ -2,7 +2,7 @@ package com.hcl.ers.util.itests.beans;
 
 import java.util.Map;
 
-public class InitGroup {
+public class YamlInitGroup {
 
 	Map<String, String> variables;
 

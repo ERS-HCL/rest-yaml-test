@@ -10,8 +10,8 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.hcl.ers.util.itests.beans.InitGroup;
-import com.hcl.ers.util.itests.beans.TestGroup;
+import com.hcl.ers.util.itests.beans.YamlInitGroup;
+import com.hcl.ers.util.itests.beans.YamlTestGroup;
 import com.hcl.ers.util.itests.data.TestData;
 import com.hcl.ers.util.itests.util.JsonMapper;
 import com.jayway.restassured.RestAssured;
@@ -51,17 +51,17 @@ public abstract class AbstractITest {
 		RestAssured.useRelaxedHTTPSValidation();
 	}
 	
-	public static List<TestGroup> getTestGroupData() {
+	public static List<YamlTestGroup> getTestGroupData() {
 		long startTime = System.currentTimeMillis();
-		List<TestGroup> groups = JsonMapper.toObject(testData.getTestData().getObject("testGroup", List.class), TestGroup.class);
+		List<YamlTestGroup> groups = JsonMapper.toObject(testData.getTestData().getObject("testGroup", List.class), YamlTestGroup.class);
 		long endTime = System.currentTimeMillis();
 		
 		System.out.println("total testGroup count="+groups.size()+" yaml parsing time in millis="+(endTime-startTime));
 		return groups;
 	}
 	
-	public static InitGroup getInitGroupData() {
-		InitGroup initGroup = JsonMapper.toObject(testData.getTestData().getObject("initGroup", Map.class), InitGroup.class);
+	public static YamlInitGroup getInitGroupData() {
+		YamlInitGroup initGroup = JsonMapper.toObject(testData.getTestData().getObject("initGroup", Map.class), YamlInitGroup.class);
 		return initGroup;
 	}
 	

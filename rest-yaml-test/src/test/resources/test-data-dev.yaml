@@ -51,7 +51,14 @@ testGroup:
              asserts:
                -
                   jsonPath: args.foo
-                  value: "v1,v2"
+                  value: '["v1","v2"]'
+               -
+                  jsonPath: args.foo
+                  match: hasItems
+                  value: '["v1"]'
+               -
+                  regex: gzip
+                  value: gzip                 
                -
                   jsonPath: args
                   match: strict

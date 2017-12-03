@@ -1,6 +1,6 @@
 package com.hcl.ers.util.itests.beans;
 
-public class Variable {
+public class YamlVariable {
 	
 	String name;
 	String value;

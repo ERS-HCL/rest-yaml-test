@@ -1,8 +1,10 @@
 package com.hcl.ers.util.itests.beans;
 
-public class JsonAssert {
+public class YamlBodyAssert {
 
 	String jsonPath;
+	String regex;
+	String select;
 	String dataType;
 	String match;
 	String value;
@@ -39,4 +41,19 @@ public class JsonAssert {
 		this.value = value;
 	}
 
+	public String getSelect() {
+		return select;
+	}
+
+	public void setSelect(String select) {
+		this.select = select;
+	}
+
+	public String getRegex() {
+		return regex;
+	}
+
+	public void setRegex(String regex) {
+		this.regex = regex;
+	}
 }
