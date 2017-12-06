@@ -10,6 +10,7 @@ public class YamlRequest {
 	private String body;
 	private Map<String, String> parameters;
 	private Map<String, String> cookies;
+	private boolean encodeURL;
 	
 	public String getUri() {
 		return uri;
@@ -57,6 +58,14 @@ public class YamlRequest {
 
 	public void setCookies(Map<String, String> cookies) {
 		this.cookies = cookies;
+	}
+
+	public boolean isEncodeURL() {
+		return encodeURL;
+	}
+
+	public void setEncodeURL(boolean encodeURL) {
+		this.encodeURL = encodeURL;
 	}
 	
 }

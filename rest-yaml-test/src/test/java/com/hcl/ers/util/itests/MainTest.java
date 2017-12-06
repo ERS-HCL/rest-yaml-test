@@ -57,6 +57,9 @@ public class MainTest extends AbstractITest {
 			System.out.println("-->start test ="+test.getName()+" , test count="+testCount);
 			
 			RequestSpecification rs = given().spec(rspec);
+			if(test.getRequest().isEncodeURL() == false) {
+				rs = rs.urlEncodingEnabled(false);
+			}
 			RestRequest.build(rs, test, initGroup).request().doAssert();
 			
 			System.out.println("-->end test ="+test.getName()+" ,test count="+testCount);

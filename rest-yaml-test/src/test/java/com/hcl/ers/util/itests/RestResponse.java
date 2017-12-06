@@ -3,14 +3,13 @@ package com.hcl.ers.util.itests;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.json.JSONException;
 import org.junit.Assert;
 
 import com.hcl.ers.util.itests.beans.YamlInitGroup;
 import com.hcl.ers.util.itests.beans.YamlTest;
+import com.hcl.ers.util.itests.util.Regex;
 import com.hcl.ers.util.itests.util.Variable;
 import com.jayway.restassured.response.Response;
 
@@ -53,7 +52,13 @@ public class RestResponse {
 					System.out.println("variable value from cookie " + variable+"="+value);
 				} else if (entry.getValue().startsWith("body.")) {
 					String variable = entry.getKey();
-					String value = response.body().jsonPath().getString(entry.getValue().substring(5));
+					String value = "null";
+					if(entry.getValue().startsWith("body.regex")) {
+						String regExPattern = entry.getValue().substring(10);
+						value  = (String) Regex.find(regExPattern, response.body().asString());
+					} else {
+						value = response.body().jsonPath().getString(entry.getValue().substring(5));
+					}
 					System.out.println("variable value from body " + variable+"="+value);
 					yamlInitGroup.getVariables().put(variable, value);
 				}

@@ -39,6 +39,7 @@ testGroup:
          request:
            uri: "/get?foo=v1&foo=v2"
            method: get
+           encodeURL: false
            headers: 
              content-type: "application/json"
              uuid: uuid-1
