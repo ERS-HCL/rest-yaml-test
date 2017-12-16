@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
-import org.junit.Assert;
+import static org.hamcrest.MatcherAssert.assertThat;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import com.hcl.ers.util.itests.beans.YamlBodyAssert;
@@ -65,15 +65,15 @@ public class BodyAssert {
 	private void atomicCollectionAssert(YamlBodyAssert bodyAssert, List<Object> actual) {
 		List<Object> expected = JsonPath.from(bodyAssert.getValue()).get();		
 		if(bodyAssert.getMatch()!= null && bodyAssert.getMatch().equalsIgnoreCase("hasItems")) {
-			Assert.assertThat(actual, hasItems(expected.toArray()));
+			assertThat(actual, hasItems(expected.toArray()));
 		} else {
-			Assert.assertThat(actual, equalTo(expected));
+			assertThat(actual, equalTo(expected));
 		}
 	}
 	
 	private void atomicAssert(YamlBodyAssert bodyAssert, String actual) {
 		String expected = bodyAssert.getValue();
-		Assert.assertThat(actual, equalTo(expected));
+		assertThat(actual, equalTo(expected));
 	}
 	
 	private void jsonAssert(YamlBodyAssert bodyAssert, Map map) throws JSONException {

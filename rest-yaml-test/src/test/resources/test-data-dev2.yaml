@@ -2,7 +2,7 @@
     name: test group to show uri, method, parameters, headers and cookies usages
     tests:
       -
-         name: simple test 1
+         name: simple test 2
          request:
            uri: "/get"
            method: get

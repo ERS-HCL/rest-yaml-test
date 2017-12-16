@@ -6,10 +6,6 @@ import static com.jayway.restassured.config.RedirectConfig.redirectConfig;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
 import com.hcl.ers.util.itests.beans.YamlInitGroup;
 import com.hcl.ers.util.itests.beans.YamlTestGroup;
 import com.hcl.ers.util.itests.data.TestData;
@@ -22,32 +18,30 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 
-@RunWith(value = Parameterized.class)
 public abstract class AbstractITest {
 	
 	public static final String ENV = "env";
 
-	public Config conf;
-	public int port;
-	public String baseURL;
+	public static Config conf;
+	public static int port;
+	public static String baseURL;
 
-	public RequestSpecification rspec;
+	public static RequestSpecification rspec;
 	
 	public static TestData testData = new TestData(getEnv());
 	
 	
-	@Before
-	public void setUp() {
-		this.conf = ConfigFactory.load("application-" + getEnv());
-		this.baseURL = conf.getString("server.baseURI");
-		this.port = conf.getInt("server.port");
+	public static void abstractSetUp() {
+		conf = ConfigFactory.load("application-" + getEnv());
+		baseURL = conf.getString("server.baseURI");
+		port = conf.getInt("server.port");
 
 		final RequestSpecBuilder build = new RequestSpecBuilder().setBaseUri(baseURL).setPort(port);
 
 		rspec = build.build();
 		RestAssured.config = new RestAssuredConfig()
 								.encoderConfig(encoderConfig().defaultContentCharset("UTF-8"))
-								.redirect(redirectConfig().followRedirects(true).and().maxRedirects(1));
+								.redirect(redirectConfig().followRedirects(false));
 		RestAssured.useRelaxedHTTPSValidation();
 	}
 	

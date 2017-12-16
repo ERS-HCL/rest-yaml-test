@@ -55,6 +55,9 @@ public class RestRequest {
 	}
 	
 	public RestResponse request() {
+		if (yamlTest.getRequest().isEncodeURL() == false) {
+			rs = rs.urlEncodingEnabled(false);
+		}
 		addHeaders();
 		addParameters();
 		addCookies();

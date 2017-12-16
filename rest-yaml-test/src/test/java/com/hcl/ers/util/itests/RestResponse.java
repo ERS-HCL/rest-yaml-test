@@ -5,7 +5,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import java.util.Map;
 
 import org.json.JSONException;
-import org.junit.Assert;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.hcl.ers.util.itests.beans.YamlInitGroup;
 import com.hcl.ers.util.itests.beans.YamlTest;
@@ -30,7 +30,7 @@ public class RestResponse {
 	}
 	
 	public void doAssert() throws JSONException {
-		Assert.assertThat(response.statusCode(), equalTo(yamlTest.getResponse().getStatus()));
+		assertThat(response.statusCode(), equalTo(yamlTest.getResponse().getStatus()));
 		headersAssert();
 		cookiesAssert();
 		BodyAssert.build(response, yamlTest).doAssert();
@@ -72,7 +72,7 @@ public class RestResponse {
 			for (Map.Entry<String, String> entry : yamlTest.getResponse().getHeaders().entrySet()) {
 				String actual = response.getHeader(entry.getKey());
 				String expected = Variable.replaceValue(entry.getValue(), yamlInitGroup);
-				Assert.assertThat(actual, equalTo(expected));
+				assertThat(actual, equalTo(expected));
 			}
 		}
 	}
@@ -83,7 +83,7 @@ public class RestResponse {
 			for (Map.Entry<String, String> entry : yamlTest.getResponse().getCookies().entrySet()) {
 				String actual = response.getCookie(entry.getKey());
 				String expected = Variable.replaceValue(entry.getValue(), yamlInitGroup);
-				Assert.assertThat(actual, equalTo(expected));
+				assertThat(actual, equalTo(expected));
 			}
 		}
 	}
