@@ -28,7 +28,7 @@ testGroup:
                "c": "d"
              } 
          response:
-           status: 201
+           status: 200
            headers:
              content-type: "application/json"
   -
