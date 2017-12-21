@@ -1,4 +1,4 @@
-package com.hcl.ers.util.itests;
+package com.github.rest.yaml.test;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 
@@ -7,14 +7,15 @@ import java.util.Map;
 import org.json.JSONException;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import com.hcl.ers.util.itests.beans.YamlInitGroup;
-import com.hcl.ers.util.itests.beans.YamlTest;
-import com.hcl.ers.util.itests.util.Regex;
-import com.hcl.ers.util.itests.util.Variable;
+import com.github.rest.yaml.test.beans.YamlInitGroup;
+import com.github.rest.yaml.test.beans.YamlTest;
+import com.github.rest.yaml.test.util.Logger;
+import com.github.rest.yaml.test.util.Regex;
+import com.github.rest.yaml.test.util.Variable;
 import com.jayway.restassured.response.Response;
 
 public class RestResponse {
-	
+	private static Logger logger = new Logger();
 	private Response response;
 	private YamlTest yamlTest;
 	private YamlInitGroup yamlInitGroup;
@@ -43,13 +44,13 @@ public class RestResponse {
 				if(entry.getValue().startsWith("header.")) {
 					String variable = entry.getKey();
 					String value = response.getHeader(entry.getValue().substring(7));
-					System.out.println("variable value from header " + variable+"="+value);
+					logger.debug("variable value from header " + variable+"="+value);
 					yamlInitGroup.getVariables().put(variable, value);
 				} else if (entry.getValue().startsWith("cookie.")) {
 					String variable = entry.getKey();
 					String value = response.getCookie(entry.getValue().substring(7));
 					yamlInitGroup.getVariables().put(variable, value);
-					System.out.println("variable value from cookie " + variable+"="+value);
+					logger.debug("variable value from cookie " + variable+"="+value);
 				} else if (entry.getValue().startsWith("body.")) {
 					String variable = entry.getKey();
 					String value = "null";
@@ -59,7 +60,7 @@ public class RestResponse {
 					} else {
 						value = response.body().jsonPath().getString(entry.getValue().substring(5));
 					}
-					System.out.println("variable value from body " + variable+"="+value);
+					logger.debug("variable value from body " + variable+"="+value);
 					yamlInitGroup.getVariables().put(variable, value);
 				}
 			}
@@ -67,22 +68,24 @@ public class RestResponse {
 	}
 	
 	private void headersAssert() {
-		System.out.println("response headers = "+response.getHeaders());
+		logger.debug("response headers = "+response.getHeaders());
 		if (yamlTest.getResponse().getHeaders() != null) {
 			for (Map.Entry<String, String> entry : yamlTest.getResponse().getHeaders().entrySet()) {
 				String actual = response.getHeader(entry.getKey());
 				String expected = Variable.replaceValue(entry.getValue(), yamlInitGroup);
+				logger.info("Header assert="+entry.getKey()+", expected="+expected+" actual="+actual);
 				assertThat(actual, equalTo(expected));
 			}
 		}
 	}
 		
 	private void cookiesAssert() {
-		System.out.println("response cookies = "+response.getCookies());
+		logger.debug("response cookies = "+response.getCookies());
 		if (yamlTest.getResponse().getCookies() != null) {
 			for (Map.Entry<String, String> entry : yamlTest.getResponse().getCookies().entrySet()) {
 				String actual = response.getCookie(entry.getKey());
 				String expected = Variable.replaceValue(entry.getValue(), yamlInitGroup);
+				logger.info("Cookie assert="+entry.getKey()+", expected="+expected+" actual="+actual);
 				assertThat(actual, equalTo(expected));
 			}
 		}

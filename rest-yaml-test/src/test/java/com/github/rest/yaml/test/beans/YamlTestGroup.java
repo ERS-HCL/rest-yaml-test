@@ -1,4 +1,4 @@
-package com.hcl.ers.util.itests.beans;
+package com.github.rest.yaml.test.beans;
 
 import java.util.List;
 

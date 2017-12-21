@@ -1,4 +1,4 @@
-package com.hcl.ers.util.itests.util;
+package com.github.rest.yaml.test.util;
 
 import java.util.ArrayList;
 import java.util.List;

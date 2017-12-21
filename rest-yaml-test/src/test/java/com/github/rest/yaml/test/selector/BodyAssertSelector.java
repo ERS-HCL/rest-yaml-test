@@ -1,11 +1,11 @@
-package com.hcl.ers.util.itests.selector;
+package com.github.rest.yaml.test.selector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import com.hcl.ers.util.itests.beans.YamlBodyAssert;
-import com.hcl.ers.util.itests.util.Regex;
+import com.github.rest.yaml.test.beans.YamlBodyAssert;
+import com.github.rest.yaml.test.util.Regex;
 import com.jayway.restassured.response.Response;
 
 public class BodyAssertSelector {

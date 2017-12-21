@@ -1,4 +1,4 @@
-package com.hcl.ers.util.itests.data;
+package com.github.rest.yaml.test.data;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

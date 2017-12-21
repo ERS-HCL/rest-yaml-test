@@ -1,119 +1,95 @@
 initGroup:
   variables:
-       content-type: "application/json"
-       uuid:
-       
+    content-type: application/json
+    uuid: null
 testGroup:
-  -
-    name: test group to show uri, method, parameters, headers and cookies usages
-    tests:
-      -
-         name: simple test 1
-         request:
-           uri: "/get"
-           method: get
-           parameters:
-             foo: foo1
-             baz: baz1
-           headers: 
-             content-type: ${content-type}
-             uuid: uuid-1
-           cookies:
-             cookie1: kookie1
-             cookie1: kookie2
-             cookie2: kookie3
-           body: |
-             {
-               "a": "b"
-               "c": "d"
-             } 
-         response:
-           status: 200
-           headers:
-             content-type: "application/json"
-  -
-    name: test group to show to show how to test body asserts
-    tests:
-      -
-         name: simple body asset test
-         request:
-           uri: "/get?foo=v1&foo=v2"
-           method: get
-           encodeURL: false
-           headers: 
-             content-type: "application/json"
-             uuid: uuid-1
-         response:
-           status: 200
-           variables:
-             contentType: header.content-type
-             uuid: body.headers.Uuid
-           body:
-             asserts:
-               -
-                  jsonPath: args.foo
-                  value: '["v1","v2"]'
-               -
-                  jsonPath: args.foo
-                  match: hasItems
-                  value: '["v1"]'
-               -
-                  regex: gzip
-                  value: gzip                 
-               -
-                  jsonPath: args
-                  match: strict
-                  value: |
-                    {
-                      "foo": [
-                               "v1",
-                               "v2"
-                             ]
-                    }
-               -
-                  jsonPath: headers.Host
-                  value: "httpbin.org"
-               -
-                  jsonPath: headers.Uuid
-                  value: uuid-1
-                  
-  -
-    name: show how to skip test group
-    skip: true
-    tests:
-      -
-         name: simple test
-         request:
-           uri: "/get?foo=v1&foo=v2"
-           method: get
-           headers: 
-             content-type: "application/json"
-             uuid: uuid-1
-         response:
-           status: 200
-           variables:
-             contentType: header.content-type
-             uuid: body.headers.Uuid
-           body:
-             asserts:
-               -
-                  jsonPath: args.foo
-                  value: "v1,v2"
-               -
-                  jsonPath: args
-                  match: strict
-                  value: |
-                    {
-                      "foo": [
-                               "v1",
-                               "v2"
-                             ]
-                    }
-               -
-                  jsonPath: headers.Host
-                  value: "httpbin.org"
-               -
-                  jsonPath: headers.Uuid
-                  value: uuid-1                                    
-
-                  
+- name: test group to show uri, method, parameters, headers and cookies usages
+  tests:
+  - name: simple test 1
+    request:
+      uri: /get
+      method: get
+      parameters:
+        foo: foo1
+        baz: baz1
+      headers:
+        content-type: ${content-type}
+        uuid: uuid-1
+      cookies:
+        cookie1: kookie2
+        cookie2: kookie3
+      body: |
+        {"a":"b"  "c":"d"}
+    response:
+      status: 200
+      headers:
+        content-type: application/json
+- name: test group to show to show how to test body asserts
+  tests:
+  - name: simple body asset test
+    request:
+      uri: /get?foo=v1&foo=v2
+      method: get
+      encodeURL: false
+      headers:
+        content-type: application/json
+        uuid: uuid-1
+    response:
+      status: 200
+      variables:
+        contentType: header.content-type
+        uuid: body.headers.Uuid
+      body:
+        asserts:
+        - jsonPath: args.foo
+          value: '["v1","v2"]'
+        - jsonPath: args.foo
+          match: hasItems
+          value: '["v1"]'
+        - regex: gzip
+          value: gzip
+        - jsonPath: args
+          match: strict
+          value: |
+            {
+              "foo": [
+                       "v1",
+                       "v2"
+                     ]
+            }
+        - jsonPath: headers.Host
+          value: httpbin.org
+        - jsonPath: headers.Uuid
+          value: uuid-1
+- name: show how to skip test group
+  skip: true
+  tests:
+  - name: simple test
+    request:
+      uri: /get?foo=v1&foo=v2
+      method: get
+      headers:
+        content-type: application/json
+        uuid: uuid-1
+    response:
+      status: 200
+      variables:
+        contentType: header.content-type
+        uuid: body.headers.Uuid
+      body:
+        asserts:
+        - jsonPath: args.foo
+          value: v1,v2
+        - jsonPath: args
+          match: strict
+          value: |
+            {
+              "foo": [
+                       "v1",
+                       "v2"
+                     ]
+            }
+        - jsonPath: headers.Host
+          value: httpbin.org
+        - jsonPath: headers.Uuid
+          value: uuid-1

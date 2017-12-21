@@ -1,27 +1,21 @@
-  -
-    name: test group to show uri, method, parameters, headers and cookies usages
-    tests:
-      -
-         name: simple test 2
-         request:
-           uri: "/get"
-           method: get
-           parameters:
-             foo: foo1
-             baz: baz1
-           headers: 
-             content-type: ${content-type}
-             uuid: uuid-1
-           cookies:
-             cookie1: kookie1
-             cookie1: kookie2
-             cookie2: kookie3
-           body: |
-             {
-               "a": "b"
-               "c": "d"
-             } 
-         response:
-           status: 200
-           headers:
-             content-type: "application/json"
+- name: test group to show uri, method, parameters, headers and cookies usages
+  tests:
+  - name: simple test 2
+    request:
+      uri: /get
+      method: get
+      parameters:
+        foo: foo1
+        baz: baz1
+      headers:
+        content-type: ${content-type}
+        uuid: uuid-1
+      cookies:
+        cookie1: kookie2
+        cookie2: kookie3
+      body: |
+        {"a":"b"  "c":"d"}
+    response:
+      status: 200
+      headers:
+        content-type: application/json

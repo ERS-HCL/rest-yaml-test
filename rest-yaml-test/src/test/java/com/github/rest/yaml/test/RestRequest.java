@@ -1,13 +1,11 @@
-package com.hcl.ers.util.itests;
+package com.github.rest.yaml.test;
 
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import com.hcl.ers.util.itests.beans.YamlInitGroup;
-import com.hcl.ers.util.itests.beans.YamlTest;
-import com.hcl.ers.util.itests.util.TestException;
-import com.hcl.ers.util.itests.util.Variable;
+import com.github.rest.yaml.test.beans.YamlInitGroup;
+import com.github.rest.yaml.test.beans.YamlTest;
+import com.github.rest.yaml.test.util.TestException;
+import com.github.rest.yaml.test.util.Variable;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
 

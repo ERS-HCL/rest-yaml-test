@@ -1,11 +1,12 @@
-package com.hcl.ers.util.itests.util;
+package com.github.rest.yaml.test.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.hcl.ers.util.itests.beans.YamlInitGroup;
+import com.github.rest.yaml.test.beans.YamlInitGroup;
 
 public class Variable {
+	private static Logger logger = new Logger();
 	
 	public static String replaceValue(String input, YamlInitGroup yamlInitGroup) {
 		Pattern p = Pattern.compile("\\$\\{[a-zA-Z][a-zA-Z0-9_\\-]*\\}");
@@ -24,7 +25,7 @@ public class Variable {
 		}
 		
 		if(!input.equals(output)) {
-			System.out.println("string "+input+" replaced by "+output);
+			logger.debug("string "+input+" replaced by "+output);
 		}
 		
 		return output;

@@ -1,4 +1,4 @@
-package com.hcl.ers.util.itests;
+package com.github.rest.yaml.test;
 
 import static com.jayway.restassured.RestAssured.given;
 
@@ -12,9 +12,9 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
-import com.hcl.ers.util.itests.beans.YamlInitGroup;
-import com.hcl.ers.util.itests.beans.YamlTest;
-import com.hcl.ers.util.itests.beans.YamlTestGroup;
+import com.github.rest.yaml.test.beans.YamlInitGroup;
+import com.github.rest.yaml.test.beans.YamlTest;
+import com.github.rest.yaml.test.beans.YamlTestGroup;
 import com.jayway.restassured.specification.RequestSpecification;
 
 public class MainTest extends AbstractITest {
@@ -23,13 +23,13 @@ public class MainTest extends AbstractITest {
 	public static int testGroupCount = 0;
 
 	@BeforeAll
-	public static void setUp() {
+	public static void setUp() throws Exception {
 		abstractSetUp();
 		if (initGroup == null) {
 			initGroup = getInitGroupData();
 		}
 	}
-	
+
 	@TestFactory
 	public Stream<DynamicTest> testWithRestAssured() throws Exception {
 
@@ -38,32 +38,37 @@ public class MainTest extends AbstractITest {
 
 		for (YamlTestGroup testGroup : testGroups) {
 			if (testGroup.isSkip()) {
-				System.out.println("->skipped testGroup name=" + testGroup.getName());
+				logger.info("->skipped testGroup name=" + testGroup.getName());
 				continue;
 			}
 
 			for (YamlTest test : testGroup.getTests()) {
 				if (test.isSkip()) {
-					System.out.println("-->skipped test =" + test.getName()+ ", testGroup ="+testGroup.getName());
+					logger.info("-->skipped test =" + test.getName() + ", testGroup =" + testGroup.getName());
 					continue;
 				}
-				
-				final String testcaseName = "testGroup="+ testGroup.getName()+ "->test=" + test.getName();
-				
+
+				final String testcaseName = "testGroup=" + testGroup.getName() + "->test=" + test.getName();
+
 				RequestSpecification rs = given().spec(rspec);
 				Executable exec = () -> {
-					
-					System.out.println("\n\n-->start "+testcaseName);
-					RestRequest.build(rs, test, initGroup).request().doAssert();
-					System.out.println("-->end "+testcaseName);
+
+					logger.info("\n\n-->start " + testcaseName);
+					try {
+						RestRequest.build(rs, test, initGroup).request().doAssert();
+					} catch (Throwable e) {
+						e.printStackTrace();
+						throw e;
+					}
+					logger.info("-->end " + testcaseName);
 				};
-				
+
 				DynamicTest dTest = DynamicTest.dynamicTest(testcaseName, exec);
 				dynamicTests.add(dTest);
-				
+
 			}
 		}
-		
+
 		return dynamicTests.stream();
 	}
 
