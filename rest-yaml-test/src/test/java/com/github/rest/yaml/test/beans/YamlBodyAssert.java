@@ -8,7 +8,10 @@ public class YamlBodyAssert {
 	String dataType;
 	String match;
 	String value;
-
+	
+	final public static  String regexPrefix = "regex.";
+	final public static  String jsonpathPrefix = "jsonpath.";
+	
 	public String getJsonPath() {
 		return jsonPath;
 	}
@@ -42,6 +45,14 @@ public class YamlBodyAssert {
 	}
 
 	public String getSelect() {
+		if(select == null) {
+			if(regex != null) {
+				select = regexPrefix + regex;
+			}
+			if(jsonPath != null) {
+				select = jsonpathPrefix + jsonPath;
+			}
+		}
 		return select;
 	}
 

@@ -7,14 +7,6 @@
       parameters:
         foo: foo1
         baz: baz1
-      headers:
-        content-type: ${content-type}
-        uuid: uuid-1
-      cookies:
-        cookie1: kookie2
-        cookie2: kookie3
-      body: |
-        {"a":"b"  "c":"d"}
     response:
       status: 200
       headers:

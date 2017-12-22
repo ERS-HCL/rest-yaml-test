@@ -24,6 +24,7 @@ testGroup:
       status: 200
       headers:
         content-type: application/json
+        
 - name: test group to show to show how to test body asserts
   tests:
   - name: simple body asset test
@@ -61,35 +62,21 @@ testGroup:
           value: httpbin.org
         - jsonPath: headers.Uuid
           value: uuid-1
-- name: show how to skip test group
-  skip: true
+          
+- name: body assert
+  skip: false # make is true to skip this testGroup
   tests:
-  - name: simple test
+  - name: pipe
     request:
       uri: /get?foo=v1&foo=v2
       method: get
-      headers:
-        content-type: application/json
-        uuid: uuid-1
     response:
       status: 200
-      variables:
-        contentType: header.content-type
-        uuid: body.headers.Uuid
       body:
         asserts:
-        - jsonPath: args.foo
-          value: v1,v2
-        - jsonPath: args
-          match: strict
+        - select: jsonpath.args | jsonpath.foo
           value: |
-            {
-              "foo": [
-                       "v1",
-                       "v2"
-                     ]
-            }
-        - jsonPath: headers.Host
-          value: httpbin.org
-        - jsonPath: headers.Uuid
-          value: uuid-1
+                 ["v1","v2"]
+        - select: jsonpath.args | jsonpath.foo | regex.v1
+          value: v1
+                 

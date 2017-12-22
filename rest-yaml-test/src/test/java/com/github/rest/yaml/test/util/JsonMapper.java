@@ -10,6 +10,10 @@ public class JsonMapper {
 	private static ObjectMapper mapper = new ObjectMapper();
 
 	public static String toJson(Object object) {
+		if(object instanceof String) {
+			return (String)object;
+		}
+		
 		try {
 			return mapper.writeValueAsString(object);
 		}  catch (Exception e) {

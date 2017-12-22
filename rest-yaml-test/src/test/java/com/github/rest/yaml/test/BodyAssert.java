@@ -2,12 +2,12 @@ package com.github.rest.yaml.test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
-import static org.hamcrest.MatcherAssert.assertThat;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import com.github.rest.yaml.test.beans.YamlBodyAssert;
@@ -66,29 +66,39 @@ public class BodyAssert {
 	private void atomicCollectionAssert(YamlBodyAssert bodyAssert, List<Object> actual) {
 		List<Object> expected = JsonPath.from(bodyAssert.getValue()).get();		
 		
-		if(bodyAssert.getMatch()!= null && bodyAssert.getMatch().equalsIgnoreCase("hasItems")) {
-			logger.info("Body assert jsonPath="+bodyAssert.getJsonPath()+", expected="+expected+" actual="+actual);
+		if(bodyAssert.getMatch() != null && bodyAssert.getMatch().equalsIgnoreCase("hasItems")) {
+			log(bodyAssert, expected, actual);
 			assertThat(actual, hasItems(expected.toArray()));
 		} else {
-			logger.info("Body assert jsonPath="+bodyAssert.getJsonPath()+", expected="+expected+" actual="+actual);
+			log(bodyAssert, expected, actual);
 			assertThat(actual, equalTo(expected));
 		}
 	}
 	
 	private void atomicAssert(YamlBodyAssert bodyAssert, String actual) {
 		String expected = bodyAssert.getValue();
-		logger.info("Body assert jsonPath="+bodyAssert.getJsonPath()+", expected="+expected+" actual="+actual);
+		log(bodyAssert, expected, actual);
 		assertThat(actual, equalTo(expected));
 	}
 	
 	private void jsonAssert(YamlBodyAssert bodyAssert, Map map) throws JSONException {
 		String expected = bodyAssert.getValue();
 		String actual = JsonMapper.toJson(map);
-		logger.info("Body assert jsonPath="+bodyAssert.getJsonPath()+", expected="+expected+" actual="+actual);
+		log(bodyAssert, expected, actual);
+		
 		if(bodyAssert.getMatch() != null && bodyAssert.getMatch().equalsIgnoreCase("strict")) {
 			JSONAssert.assertEquals(expected, actual, true);
 		} else {
 			JSONAssert.assertEquals(expected, actual, false);
 		}
 	}
+	
+	private void log(YamlBodyAssert bodyAssert, Object expected, Object actual) {
+		String match = "equals";
+		if(bodyAssert.getMatch()!=null) {
+			match = bodyAssert.getMatch();
+		}
+		logger.info("Body assert select="+bodyAssert.getSelect()+" match="+match+", expected="+expected+" actual="+actual);
+	}
+	
 }
