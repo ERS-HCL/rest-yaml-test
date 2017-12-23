@@ -1,4 +1,33 @@
-Test your REST API by writing test data in YAML only without writing any code.
+Test your REST API without writing any script. You write your test cases in YAML. Read below simple example.
+
+```
+  tests:
+  - name: simple test
+    request: # http define request parameters e.g. uri, method, cookie, header
+      uri: https://httpbin.org/get?foo=vs1&foo=v2
+      method: post # http method get/post/put/delete
+      headers: # set headers
+        content-type: application/json
+        uuid: uuid-1
+      cookies: # set cookies
+        cookie1: kookie1
+        cookie2: kookie2
+      body: | # post payload
+        {"a":"b"  "c":"d"}
+    response: # test response
+      status: 200 # assert that http status code 200
+      headers: # test header data
+        content-type: application/json # test content-type header value is application/json
+      cookies: # test cookies data
+        cookie1: kookie1 # test cookie1 value is kookie1
+        cookie2: kookie2
+      body: # test response body
+        asserts: # add multiple assert statements
+        - select: jsonpath args | jsonpath foo  # use unix like pipe feature to filter http response data in multiple stages
+          value: ["vs1","v2"] # expected output
+        - select: jsonpath.args | jsonpath.foo | regex.v1 # from the htpp response data get jsonpath expression "args" value then from the output get jsonpah expression "foo" value then from the output run regular expression "v\d"
+          value: v2
+```
 
 # How to start?
 This is a Java Maven project. Follow these steps.
