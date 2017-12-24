@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.github.rest.yaml.test.util.Environment;
 import com.jayway.restassured.path.json.JsonPath;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -20,13 +21,10 @@ public class TestData {
 	private static ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
 	private static ObjectMapper jsonMapper = new ObjectMapper();
 	private JsonPath dataJsonPath;
-
-	private Config config;
 	private List<String> testFiles;
 	
-	public TestData(String env) {
-		this.config = ConfigFactory.load("application-" + env);
-		this.testFiles = Arrays.asList(config.getString("testFiles").split("[\\s,]+"));
+	public TestData(Environment env) {
+		this.testFiles = env.getTestFiles();
 		buildTestData();
 	}
 	

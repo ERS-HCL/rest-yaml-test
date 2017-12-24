@@ -24,7 +24,7 @@ public abstract class AbstractITest {
 	public static int port;
 	public static String baseURL;
 	public static RequestSpecification rspec;
-	public static TestData testData = new TestData(Environment.instance().getEnv());
+	public static TestData testData = new TestData(Environment.instance());
 	static Logger logger = new Logger();
 	
 	public static void abstractSetUp() throws Exception {

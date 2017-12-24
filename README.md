@@ -29,17 +29,19 @@ Test your REST API without writing any script. You write your test cases in YAML
           value: v2
 ```
 
-# How to start?
-This is a Java Maven project. Follow these steps.
-- Import this project into your eclipse workspace.
-- Create one or more test data files for each environment if you want to run your tests against different environments e.g. dev, test
-- Create new application configuration file with "application-environment-name.properties" where "environment-name" is the name of environment and change "server.port", "server.baseURI" and "testFiles" properties value.
-- Write test cases in the format give below.
-- Run "mvn clean verify {environment-name}" from command window where "environment-name" is the name of environment.
-- If you want to run test from eclipse then right click "MainTest" class and run it as junit test.
+# Quick setup steps
+This is a Java Maven project. Java 1.8 and Maven is required. Follow below steps to quickly run sample tests or create your test.
+- Clone this project into a directory.
+- Run "maven clean verify" to run sample tests defined in test-1.yaml and test-2.yaml files in "src/test/resources" directory.
+- To define your tests create new test files in "src/test/resources" directory and change "server.port", "server.baseURI" and "testFiles" properties in "src/test/resources/configuration.properties" file.
+
+# Extra setup steps
+- If you have multiple environments dev, test etc. and you want to create separate set of tests for each environment then create test files for each environment. Create new configuration file with "configuration-environment.properties" where "environment" is the name of environment. Change "server.port", "server.baseURI" and "testFiles" properties value.
+- Run "maven clean verify environment" where "environment" is the name of environment to run test.
+- If you want to run test from Eclipse IDE then import this maven project into Eclipse and right click "MainTest" class and run it as junit test. This test framework uses Junit5 so Eclipse IDE  Oxygen.2 Release (4.7.2) or higher is supported but you can run test as maven from lower version of Eclipse.
 
 # How to write test cases?
-- Please read "src/test/resources/test-data-dev.yaml" test case file.
+- Please read "src/test/resources/test-1.yaml" test file.
 - Define variables. 
   Variables can be defined inside the initGroup and they have global scope. that means you use these variables anywhere. You can reference these variables like ${variableName} to assign values to a header, a cookie and in a request uri. You can also assign values to these variables from REST response and refer the value in subsequent tests.
 - Example:

@@ -1,5 +1,8 @@
 package com.github.rest.yaml.test.util;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
@@ -10,7 +13,8 @@ public class Environment {
 	private int port;
 	private String baseURL;
 	private boolean logDebug;
-
+	private List<String> testFiles;
+	
 	private static Environment env;
 
 	public static Environment instance() {
@@ -21,10 +25,17 @@ public class Environment {
 	}
 
 	private Environment() {
-		conf = ConfigFactory.load("application-" + getEnv());
+		String env = getEnv();
+		if(env == null) {
+			conf = ConfigFactory.load("configuration");
+		} else {
+			conf = ConfigFactory.load("configuration-"+env);
+		}
+		
 		baseURL = conf.getString("server.baseURI");
 		port = conf.getInt("server.port");
 		logDebug = conf.getBoolean("logDebug");
+		testFiles = Arrays.asList(conf.getString("testFiles").split("[\\s,]+"));
 	}
 
 	public boolean getLogDebug() {
@@ -39,12 +50,16 @@ public class Environment {
 		return port;
 	}
 
-	public String getEnv() {
+	public List<String> getTestFiles() {
+		return testFiles;
+	}
+	
+	private String getEnv() {
 		final String env = System.getProperty(ENV);
 		if (env != null) {
 			return env;
 		} else {
-			return "dev";
+			return null;
 		}
 	}
 }
