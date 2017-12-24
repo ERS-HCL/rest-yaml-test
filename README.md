@@ -1,6 +1,9 @@
-Test your REST API without writing any script. You write your test cases in YAML. Read below simple example.
+Test your REST API without writing any script. Define your test cases in simple YAML format and run.
+
+Read below simple example.
 
 ```
+---
   tests:
   - name: simple test
     request: # Define http request parameters e.g. uri, method, cookie, header
