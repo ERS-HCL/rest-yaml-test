@@ -74,9 +74,9 @@ testGroup:
       status: 200
       body:
         asserts:
-        - select: jsonpath.args | jsonpath.foo
+        - select: jsonpath args | jsonpath foo
           value: |
                  ["vs1","v2"]
-        - select: jsonpath.args | jsonpath.foo | regex.v\d
+        - select: jsonpath args | jsonpath foo | regex v\d
           value: v2
                  

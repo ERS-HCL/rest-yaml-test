@@ -5,12 +5,14 @@ public class YamlBodyAssert {
 	String jsonPath;
 	String regex;
 	String select;
-	String dataType;
 	String match;
 	String value;
 	
-	final public static  String regexPrefix = "regex.";
-	final public static  String jsonpathPrefix = "jsonpath.";
+	public static enum ExpressionType {
+		regex,
+		jsonpath,
+		string
+	}
 	
 	public String getJsonPath() {
 		return jsonPath;
@@ -18,14 +20,6 @@ public class YamlBodyAssert {
 
 	public void setJsonPath(String jsonPath) {
 		this.jsonPath = jsonPath;
-	}
-
-	public String getDataType() {
-		return dataType;
-	}
-
-	public void setDataType(String dataType) {
-		this.dataType = dataType;
 	}
 
 	public String getMatch() {
@@ -47,10 +41,10 @@ public class YamlBodyAssert {
 	public String getSelect() {
 		if(select == null) {
 			if(regex != null) {
-				select = regexPrefix + regex;
+				select = ExpressionType.regex + " " + regex;
 			}
 			if(jsonPath != null) {
-				select = jsonpathPrefix + jsonPath;
+				select = ExpressionType.jsonpath +" " + jsonPath;
 			}
 		}
 		return select;

@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,6 @@ public class BodyAssert {
 	private static Logger logger = new Logger();
 	private Response response;
 	private YamlTest yamlTest;
-	private BodyAssertSelector BodyAssertSelector = new BodyAssertSelector();
 	
 	public static BodyAssert build (Response response, YamlTest yamlTest) {
 		return new BodyAssert(response, yamlTest);
@@ -44,13 +44,13 @@ public class BodyAssert {
 	}
 	
 	private void doAssert(YamlBodyAssert bodyAssert) throws JSONException {
-		Object value = BodyAssertSelector.select(response, bodyAssert);
+		Object value = BodyAssertSelector.build(bodyAssert).eval(response);
 		if (value instanceof Map) {
 			jsonAssert(bodyAssert, (Map) value);
 		} else if (value instanceof List) {
 			List<Object> v = ((List<Object>) value);
 			if (v.isEmpty()) {
-				throw new TestException("Empty list test=" + yamlTest.getName() + " select=" + bodyAssert.getSelect());
+				throw new TestException("Evaluation of select expression return empty list test=" + yamlTest.getName() + " select=" + bodyAssert.getSelect());
 			}
 			if (v.get(0) instanceof Map) {
 				jsonAssert(bodyAssert, (Map) v);
@@ -64,7 +64,12 @@ public class BodyAssert {
 	}
 	
 	private void atomicCollectionAssert(YamlBodyAssert bodyAssert, List<Object> actual) {
-		List<Object> expected = JsonPath.from(bodyAssert.getValue()).get();		
+		List<Object> expected = new ArrayList<Object>();
+		try {
+			expected = JsonPath.from(bodyAssert.getValue()).get();
+		} catch (Throwable e) {
+			throw new TestException("Parsing error for value field of " + yamlTest.getName() + " select=" + bodyAssert.getSelect()+" expected value is array in [\"v1\",\"v2\"] format");
+		}
 		
 		if(bodyAssert.getMatch() != null && bodyAssert.getMatch().equalsIgnoreCase("hasItems")) {
 			log(bodyAssert, expected, actual);
@@ -98,7 +103,7 @@ public class BodyAssert {
 		if(bodyAssert.getMatch()!=null) {
 			match = bodyAssert.getMatch();
 		}
-		logger.info("Body assert select="+bodyAssert.getSelect()+" match="+match+", expected="+expected+" actual="+actual);
+		logger.info("Body assert select="+bodyAssert.getSelect()+", match="+match+", expected="+expected+" actual="+actual);
 	}
 	
 }

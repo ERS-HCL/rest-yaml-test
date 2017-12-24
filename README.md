@@ -3,7 +3,7 @@ Test your REST API without writing any script. You write your test cases in YAML
 ```
   tests:
   - name: simple test
-    request: # http define request parameters e.g. uri, method, cookie, header
+    request: # Define http request parameters e.g. uri, method, cookie, header
       uri: https://httpbin.org/get?foo=vs1&foo=v2
       method: post # http method get/post/put/delete
       headers: # set headers
@@ -15,7 +15,7 @@ Test your REST API without writing any script. You write your test cases in YAML
       body: | # post payload
         {"a":"b"  "c":"d"}
     response: # test response
-      status: 200 # assert that http status code 200
+      status: 200 # test that http status code 200
       headers: # test header data
         content-type: application/json # test content-type header value is application/json
       cookies: # test cookies data
@@ -25,7 +25,7 @@ Test your REST API without writing any script. You write your test cases in YAML
         asserts: # add multiple assert statements
         - select: jsonpath args | jsonpath foo  # use unix like pipe feature to filter http response data in multiple stages
           value: ["vs1","v2"] # expected output
-        - select: jsonpath.args | jsonpath.foo | regex.v1 # from the htpp response data get jsonpath expression "args" value then from the output get jsonpah expression "foo" value then from the output run regular expression "v\d"
+        - select: jsonpath args | jsonpath foo | regex v\d # from the htpp response data get jsonpath expression "args" value then from the output get jsonpah expression "foo" value then from the output run regular expression "v\d"
           value: v2
 ```
 
@@ -135,10 +135,11 @@ testGroup:
                     body:
                         asserts: # add multiple assert key value pairs
                             -
-                                jsonPath: args.foo # json path expression to be used to get value from response body
-                                value: "v1,v2" # if the return value from json path is list of atomic values you can match them with comma separated values like this.
+                                select: jsonpath args.foo # json path expression to be used to get value from response body
+                                value: |
+                                       [v1,v2] # if the return value from json path is list of atomic values you can match them with comma separated values like this.
                             -
-                                jsonPath: args # json path expression
+                                select: jsonpath args # json path expression
                                 match: strict # if the return value from json path is json then JsonAssert is used to match expected and actual values refer http://jsonassert.skyscreamer.org/cookbook.html
                                 value: | # expected json value
                                     {
@@ -147,7 +148,7 @@ testGroup:
                                         "v2"
                                         ]
                                     }
-                            -
-                                jsonPath: headers.Host #json path expression
-                                value: "httpbin.org" #if the json path returns single value then you can match it like this.
+                            - 
+                                select: jsonpath args | jsonpath foo | regex v\d # from the htpp response data get jsonpath expression "args" value then from the output get jsonpah expression "foo" value then from the output run regular expression "v\d"
+                                value: v2
 ```
