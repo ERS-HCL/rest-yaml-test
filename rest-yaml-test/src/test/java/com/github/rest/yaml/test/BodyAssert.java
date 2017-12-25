@@ -13,7 +13,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 
 import com.github.rest.yaml.test.beans.YamlBodyAssert;
 import com.github.rest.yaml.test.beans.YamlTest;
-import com.github.rest.yaml.test.selector.BodyAssertSelector;
+import com.github.rest.yaml.test.expression.BodyAssertSelectExpression;
 import com.github.rest.yaml.test.util.JsonMapper;
 import com.github.rest.yaml.test.util.Logger;
 import com.github.rest.yaml.test.util.TestException;
@@ -44,7 +44,7 @@ public class BodyAssert {
 	}
 	
 	private void doAssert(YamlBodyAssert bodyAssert) throws JSONException {
-		Object value = BodyAssertSelector.build(bodyAssert).eval(response);
+		Object value = BodyAssertSelectExpression.build(bodyAssert).eval(response);
 		if (value instanceof Map) {
 			jsonAssert(bodyAssert, (Map) value);
 		} else if (value instanceof List) {
@@ -68,7 +68,10 @@ public class BodyAssert {
 		try {
 			expected = JsonPath.parse(bodyAssert.getValue()).read("$");
 		} catch (Throwable e) {
-			throw new TestException("Parsing error for value field of " + yamlTest.getName() + " select=" + bodyAssert.getSelect()+" expected value is array in [\"v1\",\"v2\"] format", e);
+			throw new TestException("Parsing error for test= " + yamlTest.getName() 
+			                        + " , expected value=" + bodyAssert.getValue()
+			                        + " , select=" + bodyAssert.getSelect() 
+			                        + " , expected value should be array in [\"v1\",\"v2\"] format.\n", e);
 		}
 		
 		if(bodyAssert.getMatch() != null && bodyAssert.getMatch().equalsIgnoreCase("hasItems")) {

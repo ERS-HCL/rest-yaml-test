@@ -1,4 +1,4 @@
-package com.github.rest.yaml.test.selector;
+package com.github.rest.yaml.test.expression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,24 +7,22 @@ import java.util.StringTokenizer;
 
 import com.github.rest.yaml.test.beans.YamlBodyAssert;
 import com.github.rest.yaml.test.util.JsonMapper;
-import com.github.rest.yaml.test.util.Regex;
 import com.github.rest.yaml.test.util.TestException;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
-import com.jayway.jsonpath.JsonPath;
 import com.jayway.restassured.response.Response;
 
-public class BodyAssertSelector {
+public class BodyAssertSelectExpression {
 
 	private YamlBodyAssert bodyAssert;
 
-	private BodyAssertSelector(YamlBodyAssert bodyAssert) {
+	private BodyAssertSelectExpression(YamlBodyAssert bodyAssert) {
 		this.bodyAssert = bodyAssert;
 	}
 
-	public static BodyAssertSelector build(YamlBodyAssert bodyAssert) {
-		return new BodyAssertSelector(bodyAssert);
+	public static BodyAssertSelectExpression build(YamlBodyAssert bodyAssert) {
+		return new BodyAssertSelectExpression(bodyAssert);
 	}
 
 	public Object eval(Response response) {
@@ -35,10 +33,10 @@ public class BodyAssertSelector {
 			Multimap<String, List<String>> exps = parsedExpressions(bodyAssert.getSelect());
 
 			for (Entry<String, List<String>> entry : exps.entries()) {
-				if (entry.getKey().equalsIgnoreCase(YamlBodyAssert.ExpressionType.jsonpath.toString())) {
-					value = JsonPath.parse(data).read(entry.getValue().get(0));
-				} else if (entry.getKey().equalsIgnoreCase(YamlBodyAssert.ExpressionType.regex_find.toString())) {
-					value = Regex.find(entry.getValue().get(0), data);
+				if (entry.getKey().toLowerCase().startsWith(ExpressionType.jsonpath.toString().toLowerCase())) {
+					value = JsonExpression.build(data, entry.getKey(), entry.getValue()).parse();
+				} else if (entry.getKey().toLowerCase().startsWith(ExpressionType.regex.toString().toLowerCase())) {
+					value = RegexExpression.build(data, entry.getKey(), entry.getValue()).parse();
 				} else {
 					throw new TestException("Expression="+entry.getKey()+" not supported in select=" + bodyAssert.getSelect());
 				}
@@ -76,13 +74,12 @@ public class BodyAssertSelector {
 		return parsedExpressions;
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	private void validateExpression(String expression) {
 		List<String> args = tokinize(expression, " ");
 		
 		// examples "jsonpath json-expression" or "regex v\d" or "string.startsWith abc"
 		// or "string.matches v\d"
-		if (args.isEmpty() || args.size() < 2 || !YamlBodyAssert.ExpressionType.exist(args.get(0))) {
+		if (args.isEmpty() || args.size() < 2 || !ExpressionType.exist(args.get(0))) {
 			throw new TestException("Expression=" + expression + " is not not support in select=" + bodyAssert.getSelect());
 		}
 	}

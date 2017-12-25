@@ -17,10 +17,6 @@ public class Regex {
 			list.add(matched);
 		}
 
-		if (!list.isEmpty() && list.size() == 1) {
-			return list.get(0);
-		}
-
 		return list;
 	}
 

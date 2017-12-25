@@ -26,7 +26,7 @@ public class MainTest extends AbstractITest {
 	}
 
 	@TestFactory
-	public Stream<DynamicTest> testWithRestAssured() throws Exception {
+	public Stream<DynamicTest> tests() throws Exception {
 
 		List<YamlTestGroup> testGroups = getTestGroupData();
 		Collection<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
@@ -44,7 +44,7 @@ public class MainTest extends AbstractITest {
 					continue;
 				}
 
-				final String testcaseName = "testGroup=" + testGroup.getName() + "->test=" + test.getName();
+				final String testcaseName = "testGroup=" + testGroup.getName() + ", test=" + test.getName();
 				RequestSpecification rs = given().spec(rspec);
 				Executable exec = () -> {
 
