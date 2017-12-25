@@ -2,8 +2,12 @@ package com.github.rest.yaml.test.beans;
 
 import java.util.Map;
 
-public class YamlResponse {
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+public class YamlResponse {
+	
+	@JsonIgnore
+	private YamlTest yamlTest;
 	private Map<String, String> headers;
 	private Map<String, String> cookies;
 	private Map<String, String> variables;
@@ -11,7 +15,16 @@ public class YamlResponse {
 	private int status;
 	
 	
+	public YamlTest getYamlTest() {
+		return yamlTest;
+	}
+
+	public void setYamlTest(YamlTest yamlTest) {
+		this.yamlTest = yamlTest;
+	}
+
 	public Map<String, String> getHeaders() {
+		headers = getYamlTest().getYamlTestGroup().getYamlInitGroup().replaceVariable(headers);
 		return headers;
 	}
 
@@ -36,6 +49,7 @@ public class YamlResponse {
 	}
 
 	public Map<String, String> getCookies() {
+		cookies = getYamlTest().getYamlTestGroup().getYamlInitGroup().replaceVariable(cookies);
 		return cookies;
 	}
 

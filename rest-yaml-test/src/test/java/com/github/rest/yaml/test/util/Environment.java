@@ -14,7 +14,7 @@ public class Environment {
 	private String baseURL;
 	private boolean logDebug;
 	private List<String> testFiles;
-	
+
 	private static Environment env;
 
 	public static Environment instance() {
@@ -26,12 +26,12 @@ public class Environment {
 
 	private Environment() {
 		String env = getEnv();
-		if(env == null) {
+		if (env == null) {
 			conf = ConfigFactory.load("configuration");
 		} else {
-			conf = ConfigFactory.load("configuration-"+env);
+			conf = ConfigFactory.load("configuration-" + env);
 		}
-		
+
 		baseURL = conf.getString("server.baseURI");
 		port = conf.getInt("server.port");
 		logDebug = conf.getBoolean("logDebug");
@@ -53,7 +53,7 @@ public class Environment {
 	public List<String> getTestFiles() {
 		return testFiles;
 	}
-	
+
 	private String getEnv() {
 		final String env = System.getProperty(ENV);
 		if (env != null) {

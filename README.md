@@ -18,7 +18,7 @@ Read below simple example.
       body: | # post payload
         {"a":"b"  "c":"d"}
     response: # test response
-      status: 200 # test that http status code 200
+      status: 200 # test that http response status code 200
       headers: # test header data
         content-type: application/json # test content-type header value is application/json
       cookies: # test cookies data
@@ -157,3 +157,9 @@ testGroup:
                                 select: jsonpath args | jsonpath foo | regex v\d # from the htpp response data get jsonpath expression "args" value then from the output get jsonpah expression "foo" value then from the output run regular expression "v\d"
                                 value: v2
 ```
+
+#References
+- http://jsonassert.skyscreamer.org/cookbook.html
+- https://github.com/json-path/JsonPath
+- https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
+

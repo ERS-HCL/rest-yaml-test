@@ -12,22 +12,17 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
-import com.github.rest.yaml.test.beans.YamlInitGroup;
 import com.github.rest.yaml.test.beans.YamlTest;
 import com.github.rest.yaml.test.beans.YamlTestGroup;
 import com.jayway.restassured.specification.RequestSpecification;
 
 public class MainTest extends AbstractITest {
 
-	public static YamlInitGroup initGroup;
 	public static int testGroupCount = 0;
 
 	@BeforeAll
 	public static void setUp() throws Exception {
 		abstractSetUp();
-		if (initGroup == null) {
-			initGroup = getInitGroupData();
-		}
 	}
 
 	@TestFactory
@@ -37,6 +32,7 @@ public class MainTest extends AbstractITest {
 		Collection<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
 
 		for (YamlTestGroup testGroup : testGroups) {
+
 			if (testGroup.isSkip()) {
 				logger.info("->skipped testGroup name=" + testGroup.getName());
 				continue;
@@ -49,13 +45,12 @@ public class MainTest extends AbstractITest {
 				}
 
 				final String testcaseName = "testGroup=" + testGroup.getName() + "->test=" + test.getName();
-
 				RequestSpecification rs = given().spec(rspec);
 				Executable exec = () -> {
 
 					logger.info("\n\n-->start " + testcaseName);
 					try {
-						RestRequest.build(rs, test, initGroup).request().doAssert();
+						RestRequest.build(rs, test).request().doAssert();
 					} catch (Throwable e) {
 						e.printStackTrace();
 						throw e;

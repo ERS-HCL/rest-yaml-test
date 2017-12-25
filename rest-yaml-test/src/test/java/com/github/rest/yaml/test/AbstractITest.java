@@ -18,15 +18,14 @@ import com.jayway.restassured.config.RestAssuredConfig;
 import com.jayway.restassured.config.SSLConfig;
 import com.jayway.restassured.specification.RequestSpecification;
 
-
 public abstract class AbstractITest {
-	
+
 	public static int port;
 	public static String baseURL;
 	public static RequestSpecification rspec;
 	public static TestData testData = new TestData(Environment.instance());
 	static Logger logger = new Logger();
-	
+
 	public static void abstractSetUp() throws Exception {
 		baseURL = Environment.instance().getBaseURL();
 		port = Environment.instance().getPort();
@@ -35,22 +34,26 @@ public abstract class AbstractITest {
 
 		rspec = build.build();
 		RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation());
-		RestAssured.config = new RestAssuredConfig()
-								.encoderConfig(encoderConfig().defaultContentCharset("UTF-8"))
-								.redirect(redirectConfig().followRedirects(false));
+		RestAssured.config = new RestAssuredConfig().encoderConfig(encoderConfig().defaultContentCharset("UTF-8"))
+				                                    .redirect(redirectConfig().followRedirects(false));
 	}
-	
+
 	public static List<YamlTestGroup> getTestGroupData() {
 		long startTime = System.currentTimeMillis();
-		List<YamlTestGroup> groups = JsonMapper.toObject(testData.getTestData().getObject("testGroup", List.class), YamlTestGroup.class);
+		List<YamlTestGroup> groups = JsonMapper.toObject(testData.getTestData().getObject("testGroup", List.class),YamlTestGroup.class);
 		long endTime = System.currentTimeMillis();
+
+		logger.info("total testGroup count=" + groups.size() + " yaml parsing time in millis=" + (endTime - startTime));
+		YamlInitGroup yamlInitGroup = getInitGroupData();
+		for (YamlTestGroup group : groups) {
+			group.setYamlInitGroup(yamlInitGroup);
+		}
 		
-		logger.info("total testGroup count="+groups.size()+" yaml parsing time in millis="+(endTime-startTime));
 		return groups;
 	}
-	
+
 	public static YamlInitGroup getInitGroupData() {
-		YamlInitGroup initGroup = JsonMapper.toObject(testData.getTestData().getObject("initGroup", Map.class), YamlInitGroup.class);
+		YamlInitGroup initGroup = JsonMapper.toObject(testData.getTestData().getObject("initGroup", Map.class),YamlInitGroup.class);
 		return initGroup;
 	}
 }

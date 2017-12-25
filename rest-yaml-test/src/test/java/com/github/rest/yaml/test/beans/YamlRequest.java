@@ -2,8 +2,12 @@ package com.github.rest.yaml.test.beans;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class YamlRequest {
 
+	@JsonIgnore
+	private YamlTest yamlTest;
 	private String uri;
 	private String method;
 	private Map<String, String> headers;
@@ -11,8 +15,17 @@ public class YamlRequest {
 	private Map<String, String> parameters;
 	private Map<String, String> cookies;
 	private boolean encodeURL;
-	
+
+	public YamlTest getYamlTest() {
+		return yamlTest;
+	}
+
+	public void setYamlTest(YamlTest yamlTest) {
+		this.yamlTest = yamlTest;
+	}
+
 	public String getUri() {
+		uri = getYamlTest().getYamlTestGroup().getYamlInitGroup().replaceVariable(uri);
 		return uri;
 	}
 
@@ -21,6 +34,7 @@ public class YamlRequest {
 	}
 
 	public Map<String, String> getHeaders() {
+		headers = getYamlTest().getYamlTestGroup().getYamlInitGroup().replaceVariable(headers);
 		return headers;
 	}
 
@@ -45,6 +59,7 @@ public class YamlRequest {
 	}
 
 	public Map<String, String> getParameters() {
+		parameters = getYamlTest().getYamlTestGroup().getYamlInitGroup().replaceVariable(parameters);
 		return parameters;
 	}
 
@@ -53,6 +68,7 @@ public class YamlRequest {
 	}
 
 	public Map<String, String> getCookies() {
+		cookies = getYamlTest().getYamlTestGroup().getYamlInitGroup().replaceVariable(cookies);
 		return cookies;
 	}
 
@@ -67,5 +83,5 @@ public class YamlRequest {
 	public void setEncodeURL(boolean encodeURL) {
 		this.encodeURL = encodeURL;
 	}
-	
+
 }

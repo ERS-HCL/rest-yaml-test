@@ -2,19 +2,32 @@ package com.github.rest.yaml.test.beans;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class YamlTestGroup {
-	
+
+	@JsonIgnore
+	private YamlInitGroup yamlInitGroup;
 	private String name;
 	private boolean skip;
-	private boolean log;
-	
 	private List<YamlTest> tests;
+
+	public YamlInitGroup getYamlInitGroup() {
+		return yamlInitGroup;
+	}
+
+	public void setYamlInitGroup(YamlInitGroup yamlInitGroup) {
+		this.yamlInitGroup = yamlInitGroup;
+	}
 
 	public List<YamlTest> getTests() {
 		return tests;
 	}
 
 	public void setTests(List<YamlTest> tests) {
+		for (YamlTest test : tests) {
+			test.setYamlTestGroup(this);
+		}
 		this.tests = tests;
 	}
 
@@ -34,12 +47,4 @@ public class YamlTestGroup {
 		this.skip = skip;
 	}
 
-	public boolean isLog() {
-		return log;
-	}
-
-	public void setLog(boolean log) {
-		this.log = log;
-	}
-	
 }
