@@ -1,5 +1,10 @@
 package com.github.rest.yaml.test.beans;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.github.rest.yaml.test.beans.YamlBodyAssert.ExpressionType;
+
 public class YamlBodyAssert {
 
 	String jsonPath;
@@ -9,9 +14,30 @@ public class YamlBodyAssert {
 	String value;
 	
 	public static enum ExpressionType {
-		regex,
-		jsonpath,
-		string
+		regex_match("regex.match"), // return match count
+		regex_find("regex.find"), // return match values
+		jsonpath("jsonpath"),
+		string("string");
+		
+		private String value;
+		
+		private ExpressionType(String value) {
+			this.value = value;
+		}
+		
+		public static boolean exist(String string) {
+			for(ExpressionType exp: ExpressionType.values()) {
+				if(exp.toString().equalsIgnoreCase(string)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public String toString() {
+			return value;
+		}
 	}
 	
 	public String getJsonPath() {
@@ -41,7 +67,7 @@ public class YamlBodyAssert {
 	public String getSelect() {
 		if(select == null) {
 			if(regex != null) {
-				select = ExpressionType.regex + " " + regex;
+				select = ExpressionType.regex_find + " " + regex;
 			}
 			if(jsonPath != null) {
 				select = ExpressionType.jsonpath +" " + jsonPath;

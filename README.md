@@ -158,7 +158,7 @@ testGroup:
                                 value: v2
 ```
 
-#References
+# References
 - http://jsonassert.skyscreamer.org/cookbook.html
 - https://github.com/json-path/JsonPath
 - https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html

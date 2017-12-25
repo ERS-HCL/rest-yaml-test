@@ -16,11 +16,23 @@ public class Regex {
 			String matched = m.group();
 			list.add(matched);
 		}
-		
-		if(!list.isEmpty() && list.size()==1) {
+
+		if (!list.isEmpty() && list.size() == 1) {
 			return list.get(0);
 		}
-		
+
 		return list;
+	}
+
+	public static int match(String pattern, String input) {
+		Pattern p = Pattern.compile(pattern);
+		Matcher m = p.matcher(input);
+		int matchCount = 0;
+
+		while (m.find()) {
+			matchCount = matchCount + 1;
+		}
+
+		return matchCount;
 	}
 }

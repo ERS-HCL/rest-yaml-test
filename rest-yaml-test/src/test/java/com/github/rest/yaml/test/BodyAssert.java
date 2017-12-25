@@ -17,7 +17,7 @@ import com.github.rest.yaml.test.selector.BodyAssertSelector;
 import com.github.rest.yaml.test.util.JsonMapper;
 import com.github.rest.yaml.test.util.Logger;
 import com.github.rest.yaml.test.util.TestException;
-import com.jayway.restassured.path.json.JsonPath;
+import com.jayway.jsonpath.JsonPath;
 import com.jayway.restassured.response.Response;
 
 public class BodyAssert {
@@ -66,9 +66,9 @@ public class BodyAssert {
 	private void atomicCollectionAssert(YamlBodyAssert bodyAssert, List<Object> actual) {
 		List<Object> expected = new ArrayList<Object>();
 		try {
-			expected = JsonPath.from(bodyAssert.getValue()).get();
+			expected = JsonPath.parse(bodyAssert.getValue()).read("$");
 		} catch (Throwable e) {
-			throw new TestException("Parsing error for value field of " + yamlTest.getName() + " select=" + bodyAssert.getSelect()+" expected value is array in [\"v1\",\"v2\"] format");
+			throw new TestException("Parsing error for value field of " + yamlTest.getName() + " select=" + bodyAssert.getSelect()+" expected value is array in [\"v1\",\"v2\"] format", e);
 		}
 		
 		if(bodyAssert.getMatch() != null && bodyAssert.getMatch().equalsIgnoreCase("hasItems")) {
