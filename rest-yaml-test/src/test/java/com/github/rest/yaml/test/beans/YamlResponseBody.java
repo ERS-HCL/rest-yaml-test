@@ -3,7 +3,8 @@ package com.github.rest.yaml.test.beans;
 import java.util.List;
 
 public class YamlResponseBody {
-	
+
+	private YamlResponse yamlResponse;
 	private List<YamlBodyAssert> asserts;
 
 	public List<YamlBodyAssert> getAsserts() {
@@ -14,4 +15,11 @@ public class YamlResponseBody {
 		this.asserts = asserts;
 	}
 
+	public YamlResponse getYamlResponse() {
+		return yamlResponse;
+	}
+
+	public void setYamlResponse(YamlResponse yamlResponse) {
+		this.yamlResponse = yamlResponse;
+	}
 }

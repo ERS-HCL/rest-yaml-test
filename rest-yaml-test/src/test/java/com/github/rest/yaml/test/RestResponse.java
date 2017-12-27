@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.json.JSONException;
 
-import com.github.rest.yaml.test.beans.YamlInitGroup;
 import com.github.rest.yaml.test.beans.YamlTest;
 import com.github.rest.yaml.test.util.Logger;
 import com.jayway.restassured.response.Response;
@@ -16,16 +15,14 @@ public class RestResponse {
 	private static Logger logger = new Logger();
 	private Response response;
 	private YamlTest yamlTest;
-	private YamlInitGroup yamlInitGroup;
 
 	public static RestResponse build(Response response, YamlTest yamlTest) {
-		return new RestResponse(response, yamlTest, yamlTest.getYamlTestGroup().getYamlInitGroup());
+		return new RestResponse(response, yamlTest);
 	}
 
-	private RestResponse(Response response, YamlTest yamlTest, YamlInitGroup yamlInitGroup) {
+	private RestResponse(Response response, YamlTest yamlTest) {
 		this.response = response;
 		this.yamlTest = yamlTest;
-		this.yamlInitGroup = yamlInitGroup;
 	}
 
 	public void doAssert() throws JSONException {
@@ -33,7 +30,7 @@ public class RestResponse {
 		headersAssert();
 		cookiesAssert();
 		BodyAssert.build(response, yamlTest).doAssert();
-		yamlInitGroup.storeVariableValue(yamlTest, response);
+		CurrentState.getYamlInitGroup().storeVariableValue(yamlTest, response);
 	}
 
 	private void headersAssert() {

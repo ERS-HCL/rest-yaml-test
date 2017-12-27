@@ -6,6 +6,7 @@ import static com.jayway.restassured.config.RedirectConfig.redirectConfig;
 import java.util.List;
 import java.util.Map;
 
+import com.github.rest.yaml.test.beans.YamlDataGroup;
 import com.github.rest.yaml.test.beans.YamlInitGroup;
 import com.github.rest.yaml.test.beans.YamlTestGroup;
 import com.github.rest.yaml.test.data.TestData;
@@ -38,22 +39,21 @@ public abstract class AbstractITest {
 				                                    .redirect(redirectConfig().followRedirects(false));
 	}
 
-	public static List<YamlTestGroup> getTestGroupData() {
+	public static List<YamlTestGroup> getTestGroups() {
 		long startTime = System.currentTimeMillis();
 		List<YamlTestGroup> groups = JsonMapper.toObject(testData.getTestData().getObject("testGroup", List.class),YamlTestGroup.class);
 		long endTime = System.currentTimeMillis();
-
 		logger.info("total testGroup count=" + groups.size() + " yaml parsing time in millis=" + (endTime - startTime));
-		YamlInitGroup yamlInitGroup = getInitGroupData();
-		for (YamlTestGroup group : groups) {
-			group.setYamlInitGroup(yamlInitGroup);
-		}
-		
 		return groups;
 	}
 
-	public static YamlInitGroup getInitGroupData() {
+	public static YamlInitGroup getInitGroup() {
 		YamlInitGroup initGroup = JsonMapper.toObject(testData.getTestData().getObject("initGroup", Map.class),YamlInitGroup.class);
+		return initGroup;
+	}
+	
+	public static YamlDataGroup getDataGroup() {
+		YamlDataGroup initGroup = JsonMapper.toObject(testData.getTestData().getObject("dataGroup", Map.class),YamlDataGroup.class);
 		return initGroup;
 	}
 }

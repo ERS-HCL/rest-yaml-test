@@ -2,29 +2,18 @@ package com.github.rest.yaml.test.beans;
 
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.rest.yaml.test.CurrentState;
 
 public class YamlResponse {
 	
-	@JsonIgnore
-	private YamlTest yamlTest;
 	private Map<String, String> headers;
 	private Map<String, String> cookies;
 	private Map<String, String> variables;
 	private YamlResponseBody body;
 	private int status;
-	
-	
-	public YamlTest getYamlTest() {
-		return yamlTest;
-	}
-
-	public void setYamlTest(YamlTest yamlTest) {
-		this.yamlTest = yamlTest;
-	}
 
 	public Map<String, String> getHeaders() {
-		headers = getYamlTest().getYamlTestGroup().getYamlInitGroup().replaceVariable(headers);
+		headers = CurrentState.getYamlInitGroup().replaceVariable(headers);
 		return headers;
 	}
 
@@ -49,7 +38,7 @@ public class YamlResponse {
 	}
 
 	public Map<String, String> getCookies() {
-		cookies = getYamlTest().getYamlTestGroup().getYamlInitGroup().replaceVariable(cookies);
+		cookies = CurrentState.getYamlInitGroup().replaceVariable(cookies);
 		return cookies;
 	}
 

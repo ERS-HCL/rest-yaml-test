@@ -1,14 +1,15 @@
 package com.github.rest.yaml.test.beans;
 
+import com.github.rest.yaml.test.CurrentState;
 import com.github.rest.yaml.test.expression.ExpressionType;
 
 public class YamlBodyAssert {
-
-	String jsonPath;
-	String regex;
-	String select;
-	String match;
-	String value;
+	
+	private String jsonPath;
+	private String regex;
+	private String select;
+	private String match;
+	private String value;
 
 	public String getJsonPath() {
 		return jsonPath;
@@ -27,6 +28,7 @@ public class YamlBodyAssert {
 	}
 
 	public String getValue() {
+		value = CurrentState.getYamlInitGroup().replaceVariable(value);
 		return value;
 	}
 
@@ -57,4 +59,5 @@ public class YamlBodyAssert {
 	public void setRegex(String regex) {
 		this.regex = regex;
 	}
+	
 }

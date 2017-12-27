@@ -1,23 +1,11 @@
 package com.github.rest.yaml.test.beans;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class YamlTest {
-
-	@JsonIgnore
-	private YamlTestGroup yamlTestGroup;
+	
 	private String name;
 	private boolean skip;
 	private YamlRequest request;
 	private YamlResponse response;
-
-	public YamlTestGroup getYamlTestGroup() {
-		return yamlTestGroup;
-	}
-
-	public void setYamlTestGroup(YamlTestGroup yamlTestGroup) {
-		this.yamlTestGroup = yamlTestGroup;
-	}
 
 	public String getName() {
 		return name;
@@ -32,7 +20,6 @@ public class YamlTest {
 	}
 
 	public void setRequest(YamlRequest request) {
-		request.setYamlTest(this);
 		this.request = request;
 	}
 
@@ -41,7 +28,6 @@ public class YamlTest {
 	}
 
 	public void setResponse(YamlResponse response) {
-		response.setYamlTest(this);
 		this.response = response;
 	}
 

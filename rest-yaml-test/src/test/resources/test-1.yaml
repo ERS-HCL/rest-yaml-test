@@ -2,6 +2,17 @@ initGroup:
   variables:
     content-type: application/json
     uuid: null
+                
+dataGroup:
+  constants:
+    foo: |
+            {
+              "foo": [
+                       "v1",
+                       "v2"
+                     ]
+            }
+    
 testGroup:
 - name: test group to show uri, method, parameters, headers and cookies usages
   tests:
@@ -50,14 +61,15 @@ testGroup:
         - regex: gzip
           value: '["gzip"]'
         - jsonPath: args
-          match: strict
           value: |
             {
               "foo": [
                        "v1",
                        "v2"
                      ]
-            }
+            }          
+        - jsonPath: args
+          value: ${foo}
         - jsonPath: headers.Host
           value: httpbin.org
         - jsonPath: headers.Uuid

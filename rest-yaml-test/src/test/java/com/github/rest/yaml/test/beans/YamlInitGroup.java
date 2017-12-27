@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.rest.yaml.test.CurrentState;
 import com.github.rest.yaml.test.util.Logger;
 import com.github.rest.yaml.test.util.Regex;
 import com.jayway.restassured.response.Response;
@@ -33,10 +34,20 @@ public class YamlInitGroup {
 		while (m.find()) {
 			String matched = m.group();
 			String variable = matched.substring(2, matched.length() - 1);
+			/*
+			 * first try with variables then constants. This means constants takes precedence.
+			 */
 			String value = getVariables().get(variable);
+			if(CurrentState.getYamlDataGroup().getConstants().get(variable) != null) {
+				value = CurrentState.getYamlDataGroup().getConstants().get(variable);
+			}
 			if (value == null) {
 				value = "null";
+				logger.info(" Warning variable/constant="
+				             + variable + " does not exist for input="
+						     +input+". variable/constant replaced with 'null' string");
 			}
+			
 			output = m.replaceFirst(value);
 			m = p.matcher(output);
 		}

@@ -12,6 +12,8 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 
+import com.github.rest.yaml.test.beans.YamlDataGroup;
+import com.github.rest.yaml.test.beans.YamlInitGroup;
 import com.github.rest.yaml.test.beans.YamlTest;
 import com.github.rest.yaml.test.beans.YamlTestGroup;
 import com.jayway.restassured.specification.RequestSpecification;
@@ -19,46 +21,38 @@ import com.jayway.restassured.specification.RequestSpecification;
 public class MainTest extends AbstractITest {
 
 	public static int testGroupCount = 0;
-
+	private static List<YamlTestGroup> yamlTestGroups;
+	private static YamlInitGroup yamlInitGroup;
+	private static YamlDataGroup yamlDataGroup;
+	
 	@BeforeAll
 	public static void setUp() throws Exception {
 		abstractSetUp();
+		yamlInitGroup = getInitGroup();
+		yamlTestGroups = getTestGroups();
+		yamlDataGroup = getDataGroup();
 	}
 
 	@TestFactory
 	public Stream<DynamicTest> tests() throws Exception {
 
-		List<YamlTestGroup> testGroups = getTestGroupData();
 		Collection<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
 
-		for (YamlTestGroup testGroup : testGroups) {
-
-			if (testGroup.isSkip()) {
-				logger.info("->skipped testGroup name=" + testGroup.getName());
+		for (YamlTestGroup yamlTestGroup : yamlTestGroups) {
+			if (yamlTestGroup.isSkip()) {
+				logger.info("->skipped testGroup name=" + yamlTestGroup.getName());
 				continue;
 			}
 
-			for (YamlTest test : testGroup.getTests()) {
-				if (test.isSkip()) {
-					logger.info("-->skipped test =" + test.getName() + ", testGroup =" + testGroup.getName());
+			for (YamlTest yamlTest : yamlTestGroup.getTests()) {
+				if (yamlTest.isSkip()) {
+					logger.info("-->skipped test =" + yamlTest.getName() + ", testGroup =" + yamlTestGroup.getName());
 					continue;
 				}
 
-				final String testcaseName = "testGroup=" + testGroup.getName() + ", test=" + test.getName();
-				RequestSpecification rs = given().spec(rspec);
-				Executable exec = () -> {
-
-					logger.info("\n\n-->start " + testcaseName);
-					try {
-						RestRequest.build(rs, test).request().doAssert();
-					} catch (Throwable e) {
-						e.printStackTrace();
-						throw e;
-					}
-					logger.info("-->end " + testcaseName);
-				};
-
-				DynamicTest dTest = DynamicTest.dynamicTest(testcaseName, exec);
+				final String testcaseName = "testGroup=" + yamlTestGroup.getName() + ", test=" + yamlTest.getName();
+				Executable executable = setupTest(yamlTestGroup, yamlTest, testcaseName);
+				DynamicTest dTest = DynamicTest.dynamicTest(testcaseName, executable);
 				dynamicTests.add(dTest);
 
 			}
@@ -67,4 +61,25 @@ public class MainTest extends AbstractITest {
 		return dynamicTests.stream();
 	}
 
+	private Executable setupTest(YamlTestGroup yamlTestGroup, YamlTest yamlTest, String testcaseName) {
+
+		RequestSpecification rs = given().spec(rspec);
+
+		Executable executable = () -> {
+			logger.info("\n\n\n-->start " + testcaseName);
+			// Initialize current state to be access globally
+			CurrentState.setState(yamlInitGroup, yamlTestGroup, yamlDataGroup, yamlTest);
+
+			try {
+				RestRequest.build(rs, yamlTest).request().doAssert();
+			} catch (Throwable e) {
+				e.printStackTrace();
+				throw e;
+			}
+
+			logger.info("-->end " + testcaseName +"\n\n\n");
+		};
+
+		return executable;
+	}
 }
