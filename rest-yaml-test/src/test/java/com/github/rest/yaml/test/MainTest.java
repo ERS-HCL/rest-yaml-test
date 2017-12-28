@@ -16,6 +16,7 @@ import com.github.rest.yaml.test.beans.YamlDataGroup;
 import com.github.rest.yaml.test.beans.YamlInitGroup;
 import com.github.rest.yaml.test.beans.YamlTest;
 import com.github.rest.yaml.test.beans.YamlTestGroup;
+import com.github.rest.yaml.test.certificate.CertificateLoader;
 import com.jayway.restassured.specification.RequestSpecification;
 
 public class MainTest extends AbstractITest {
@@ -29,6 +30,8 @@ public class MainTest extends AbstractITest {
 	public static void setUp() throws Exception {
 		abstractSetUp();
 		yamlInitGroup = getInitGroup();
+		CertificateLoader.instance().loadCertificates(yamlInitGroup.getCertificates());
+		logger.info("certificates loading done.");
 		yamlTestGroups = getTestGroups();
 		yamlDataGroup = getDataGroup();
 	}

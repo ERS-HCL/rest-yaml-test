@@ -2,6 +2,11 @@ initGroup:
   variables:
     content-type: application/json
     uuid: null
+  certificates:
+    - certificates/alice.crt
+    - certificates/bob.crt
+    - certificates/carol.crt
+    - certificates/httpbin.cer
                 
 dataGroup:
   constants:
