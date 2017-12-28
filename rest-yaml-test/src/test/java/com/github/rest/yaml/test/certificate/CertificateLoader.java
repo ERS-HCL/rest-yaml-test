@@ -1,6 +1,7 @@
 package com.github.rest.yaml.test.certificate;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,9 +16,6 @@ public class CertificateLoader {
 
 	private KeyStore trustStore;
 	private static CertificateLoader instance;
-	final private static String userHomeDir = System.getProperty("user.home");
-	final private static String trustStoreName = "rest-yaml-test-trust-store";
-	final private static String trustStoreLocation = userHomeDir + "/" + trustStoreName;
 	final private static String storePassword = "fakepassword";
 
 	private CertificateLoader() {
@@ -52,7 +50,7 @@ public class CertificateLoader {
 			throw new TestException("Certificate load failed certificate path=" + path, e);
 		}
 		
-		saveStore();
+		String trustStoreLocation = saveStore();
 		System.setProperty("javax.net.ssl.trustStore", trustStoreLocation);
 	}
 
@@ -66,13 +64,19 @@ public class CertificateLoader {
 		}
 	}
 
-	private void saveStore() {
+	private String saveStore() {
 		FileOutputStream fos = null;
+		String path;
+		String name = "rest-yaml-test";
+		String extention = ".truststore";
 		try {
-			fos = new FileOutputStream(trustStoreLocation);
+			File tempFile = File.createTempFile(name, extention);
+			tempFile.deleteOnExit();
+			path = tempFile.getAbsolutePath();
+			fos = new FileOutputStream(tempFile);
 			trustStore.store(fos, storePassword.toCharArray());
 		} catch (Exception e) {
-			throw new TestException("Key store save failed key store path=" + trustStoreLocation, e);
+			throw new TestException("Key store save failed in the tmp directory with name=" + name + extention, e);
 		} finally {
 			if (fos != null) {
 				try {
@@ -82,6 +86,8 @@ public class CertificateLoader {
 				}
 			}
 		}
+		
+		return path;
 	}
 
 	public static void main(String[] args) throws Exception {
