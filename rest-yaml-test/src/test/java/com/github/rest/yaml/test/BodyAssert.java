@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONException;
-import org.skyscreamer.jsonassert.JSONAssert;
+import static net.javacrumbs.jsonunit.JsonAssert.*;
+import static net.javacrumbs.jsonunit.core.Option.*;
 
 import com.github.rest.yaml.test.beans.YamlBodyAssert;
 import com.github.rest.yaml.test.beans.YamlTest;
@@ -34,7 +34,7 @@ public class BodyAssert {
 		this.yamlTest = yamlTest;
 	}
 	
-	public void doAssert() throws JSONException {
+	public void doAssert() {
 		logger.debug("response body = "+response.asString());
 		if(yamlTest.getResponse().getBody() != null &&  yamlTest.getResponse().getBody().getAsserts() != null) {
 			for(YamlBodyAssert bodyAssert: yamlTest.getResponse().getBody().getAsserts()) {
@@ -43,7 +43,7 @@ public class BodyAssert {
 		}
 	}
 	
-	private void doAssert(YamlBodyAssert bodyAssert) throws JSONException {
+	private void doAssert(YamlBodyAssert bodyAssert) {
 		Object value = BodyAssertSelectExpression.build(bodyAssert).eval(response);
 		if (value instanceof Map) {
 			jsonAssert(bodyAssert, (Map) value);
@@ -89,16 +89,11 @@ public class BodyAssert {
 		assertThat(actual, equalTo(expected));
 	}
 	
-	private void jsonAssert(YamlBodyAssert bodyAssert, Map map) throws JSONException {
+	private void jsonAssert(YamlBodyAssert bodyAssert, Map map) {
 		String expected = bodyAssert.getValue();
 		String actual = JsonMapper.toJson(map);
 		log(bodyAssert, expected, actual);
-		
-		if(bodyAssert.getMatch() != null && bodyAssert.getMatch().equalsIgnoreCase("strict")) {
-			JSONAssert.assertEquals(expected, actual, true);
-		} else {
-			JSONAssert.assertEquals(expected, actual, false);
-		}
+		assertJsonEquals(actual, expected, when(TREATING_NULL_AS_ABSENT, IGNORING_EXTRA_FIELDS, IGNORING_ARRAY_ORDER));
 	}
 	
 	private void log(YamlBodyAssert bodyAssert, Object expected, Object actual) {

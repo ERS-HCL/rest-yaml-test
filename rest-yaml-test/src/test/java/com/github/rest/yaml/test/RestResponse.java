@@ -5,8 +5,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import java.util.Map;
 
-import org.json.JSONException;
-
 import com.github.rest.yaml.test.beans.YamlTest;
 import com.github.rest.yaml.test.util.Logger;
 import com.jayway.restassured.response.Response;
@@ -25,7 +23,7 @@ public class RestResponse {
 		this.yamlTest = yamlTest;
 	}
 
-	public void doAssert() throws JSONException {
+	public void doAssert() {
 		assertThat(response.statusCode(), equalTo(yamlTest.getResponse().getStatus()));
 		headersAssert();
 		cookiesAssert();

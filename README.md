@@ -35,12 +35,12 @@ Read below simple example.
 # Quick setup steps
 This is a Java Maven project. Java 1.8 and Maven is required. Follow below steps to quickly run sample tests or create your test.
 - Clone this project into a directory.
-- Run "maven clean verify" to run sample tests defined in test-1.yaml and test-2.yaml files in "src/test/resources" directory.
+- Run "mvn clean verify" to run sample tests defined in test-1.yaml and test-2.yaml files in "src/test/resources" directory.
 - To define your tests create new test files in "src/test/resources" directory and change "server.port", "server.baseURI" and "testFiles" properties in "src/test/resources/configuration.properties" file.
 
 # Extra setup steps
 - If you have multiple environments dev, test etc. and you want to create separate set of tests for each environment then create test files for each environment. Create new configuration file with "configuration-environment.properties" where "environment" is the name of environment. Change "server.port", "server.baseURI" and "testFiles" properties value.
-- Run "maven clean verify environment" where "environment" is the name of environment to run test.
+- Run "mvn clean verify -Denv=environment" where "environment" is the name of environment to run test.
 - If you want to run test from Eclipse IDE then import this maven project into Eclipse and right click "MainTest" class and run it as junit test. This test framework uses Junit5 so Eclipse IDE  Oxygen.2 Release (4.7.2) or higher is supported but you can run test as maven from lower version of Eclipse.
 
 # How to write test cases?
