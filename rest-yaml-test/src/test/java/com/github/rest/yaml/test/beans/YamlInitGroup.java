@@ -39,7 +39,9 @@ public class YamlInitGroup {
 			return null;
 		}
 
-		Pattern p = Pattern.compile("\\$\\{[a-zA-Z][a-zA-Z0-9_\\-]*\\}");
+		//Pattern p = Pattern.compile("\\$\\{[a-zA-Z][a-zA-Z0-9_\\-]*\\}");
+		//ignore json-unit tags.
+		Pattern p = Pattern.compile("\\$\\{(?!json\\-unit\\.)[a-zA-Z][a-zA-Z0-9_\\-]*\\}");
 		Matcher m = p.matcher(input);
 
 		String output = input;

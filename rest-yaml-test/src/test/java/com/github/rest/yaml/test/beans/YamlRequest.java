@@ -33,6 +33,7 @@ public class YamlRequest {
 	}
 
 	public String getBody() {
+		body = CurrentState.getYamlInitGroup().replaceVariable(body);
 		return body;
 	}
 
