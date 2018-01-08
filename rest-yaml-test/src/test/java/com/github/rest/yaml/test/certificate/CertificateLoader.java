@@ -9,6 +9,7 @@ import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.util.List;
+import java.util.UUID;
 
 import com.github.rest.yaml.test.util.TestException;
 
@@ -42,7 +43,7 @@ public class CertificateLoader {
 				CertificateFactory cf = CertificateFactory.getInstance("X.509");
 				while (bis.available() > 0) {
 					Certificate cert = cf.generateCertificate(bis);
-					trustStore.setCertificateEntry("rest-yaml-test-cert-" + bis.available(), cert);
+					trustStore.setCertificateEntry(UUID.randomUUID().toString(), cert);
 				}
 			}
 

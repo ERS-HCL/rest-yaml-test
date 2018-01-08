@@ -23,6 +23,7 @@ public abstract class AbstractITest {
 
 	public static int port;
 	public static String baseURL;
+	public static List<String> certificates;
 	public static RequestSpecification rspec;
 	public static TestData testData = new TestData(Environment.instance());
 	static Logger logger = new Logger();
@@ -30,9 +31,9 @@ public abstract class AbstractITest {
 	public static void abstractSetUp() throws Exception {
 		baseURL = Environment.instance().getBaseURL();
 		port = Environment.instance().getPort();
-
+		certificates = Environment.instance().getCertificates();
+		
 		final RequestSpecBuilder build = new RequestSpecBuilder().setBaseUri(baseURL).setPort(port);
-
 		rspec = build.build();
 		RestAssured.config().sslConfig(SSLConfig.sslConfig().relaxedHTTPSValidation());
 		RestAssured.config = new RestAssuredConfig().encoderConfig(encoderConfig().defaultContentCharset("UTF-8"))

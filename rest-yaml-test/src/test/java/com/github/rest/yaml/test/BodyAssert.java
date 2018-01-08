@@ -20,6 +20,8 @@ import com.github.rest.yaml.test.util.TestException;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.restassured.response.Response;
 
+import net.javacrumbs.jsonunit.JsonAssert;
+
 public class BodyAssert {
 	private static Logger logger = new Logger();
 	private Response response;
@@ -90,10 +92,11 @@ public class BodyAssert {
 	}
 	
 	private void jsonAssert(YamlBodyAssert bodyAssert, Map map) {
+		JsonAssert.setOptions(IGNORING_ARRAY_ORDER, IGNORING_EXTRA_FIELDS, TREATING_NULL_AS_ABSENT);
 		String expected = bodyAssert.getValue();
 		String actual = JsonMapper.toJson(map);
 		log(bodyAssert, expected, actual);
-		assertJsonEquals(actual, expected, when(TREATING_NULL_AS_ABSENT, IGNORING_EXTRA_FIELDS, IGNORING_ARRAY_ORDER));
+		assertJsonEquals(expected, actual);
 	}
 	
 	private void log(YamlBodyAssert bodyAssert, Object expected, Object actual) {
@@ -104,4 +107,9 @@ public class BodyAssert {
 		logger.info("Body assert select="+bodyAssert.getSelect()+", match="+match+", expected="+expected+" actual="+actual);
 	}
 	
+	public static void main(String[] args) {
+		JsonAssert.setOptions(IGNORING_ARRAY_ORDER, IGNORING_EXTRA_FIELDS, TREATING_NULL_AS_ABSENT);
+		assertJsonEquals("{\"test\":[{\"key\":1},{\"key\":2},{\"key\":3}]}", 
+			    "{\"test\":[{\"key\":3},{\"key\":2, \"extraField\":2},{\"key\":1}]}");
+	}
 }

@@ -30,7 +30,7 @@ public class MainTest extends AbstractITest {
 	public static void setUp() throws Exception {
 		abstractSetUp();
 		yamlInitGroup = getInitGroup();
-		CertificateLoader.instance().loadCertificates(yamlInitGroup.getCertificates());
+		CertificateLoader.instance().loadCertificates(certificates);
 		logger.info("certificates loading done.");
 		yamlTestGroups = getTestGroups();
 		yamlDataGroup = getDataGroup();

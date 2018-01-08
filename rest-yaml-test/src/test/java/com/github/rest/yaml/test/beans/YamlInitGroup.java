@@ -1,7 +1,6 @@
 package com.github.rest.yaml.test.beans;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,7 +15,6 @@ public class YamlInitGroup {
 	private static Logger logger = new Logger();
 	
 	Map<String, String> variables;
-	List<String> certificates;
 	
 	public Map<String, String> getVariables() {
 		return variables;
@@ -24,14 +22,6 @@ public class YamlInitGroup {
 
 	public void setVariables(Map<String, String> variables) {
 		this.variables = variables;
-	}
-	
-	public List<String> getCertificates() {
-		return certificates;
-	}
-
-	public void setCertificates(List<String> certificates) {
-		this.certificates = certificates;
 	}
 	
 	public String replaceVariable(String input) {

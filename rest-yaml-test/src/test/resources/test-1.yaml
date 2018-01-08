@@ -2,11 +2,6 @@ initGroup:
   variables:
     content-type: application/json
     uuid: null
-  certificates:
-    - certificates/alice.crt
-    - certificates/bob.crt
-    - certificates/carol.crt
-    - certificates/httpbin.cer
                 
 dataGroup:
   constants:
@@ -96,4 +91,16 @@ testGroup:
                  ["vs1","v2"]
         - select: jsonpath args | jsonpath foo | regex.find v\d
           value: '["v2"]'
+
+  - name: json-unit
+    request:
+      uri: /get?foo=vs1&foo=v2
+      method: get
+    response:
+      status: 200
+      body:
+        asserts:
+        - select: jsonpath $
+          value: | #read https://github.com/lukas-krecan/JsonUnit
+                 {"origin":"${json-unit.regex}(([0-1]?[0-9]{1,2}\\.)|(2[0-4][0-9]\\.)|(25[0-5]\\.)){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))" , "headers":{"Host":"httpbin.org", "Connection":"${json-unit.any-string}"}}
                  
