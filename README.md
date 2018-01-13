@@ -1,9 +1,11 @@
-Test your REST API without writing any script. Define your test cases in simple YAML format and run.
+Test your REST API without writing any script in any language. This test framework lets you write your test cases in in simple YAML format. Currently only json response is supported. We use JsonPath and JsonUnit and Java regular expression libraries to provide you simple and elegant way of validating your json response. You can select a portion of http json response by JsonPath expression and regular expression then validate it with JsonUnit. You can also combine multiple JsonPath expressions and regular expressions in a Unix like pipe fashion to precisely select subset of json response and then validate it.
 
 Read below simple example.
 
 ```
 ---
+testGroup:
+- name: Simple test group
   tests:
   - name: simple test
     request: # Define http request parameters e.g. uri, method, cookie, header
@@ -43,10 +45,57 @@ This is a Java Maven project. Java 1.8 and Maven is required. Follow below steps
 - Run "mvn clean verify -Denv=environment" where "environment" is the name of environment to run test.
 - If you want to run test from Eclipse IDE then import this maven project into Eclipse and right click "MainTest" class and run it as junit test. This test framework uses Junit5 so Eclipse IDE  Oxygen.2 Release (4.7.2) or higher is supported but you can run test as maven from lower version of Eclipse.
 
+# SSL certificates support
+If you are using HTTPS protocol then you need to add certificates in "src/test/resources/configuration.properties" file like follows. How to export certificates read references. 
+
+```
+certificates=certificates/httpbin.cer,certificates/alice.crt, certificates/bob.crt, certificates/carol.crt
+```
+
 # How to write test cases?
-- Please read "src/test/resources/test-1.yaml" test file.
-- Define variables. 
-  Variables can be defined inside the initGroup and they have global scope. that means you use these variables anywhere. You can reference these variables like ${variableName} to assign values to a header, a cookie and in a request uri. You can also assign values to these variables from REST response and refer the value in subsequent tests.
+Quickest way to start is to read "src/test/resources/test-1.yaml" test file.
+A test case is a REST API call with HTTP request data to be sent and HTTP response data to be verified by the framework.
+Multiple test cases can be assigned into a testGroup. A testGroup is a collection of test cases to be executed in a sequence.
+
+Basic structure of simple test case is follows:
+```
+testGroup: # array of test group.
+- name: # name of a test group
+
+  tests: # array of test cases
+  - name: # name of tes case
+
+    request: # http request data to be sent
+      uri: # uri, host name, port are defined in configuration.properties file
+      method: #http request method get/post/put/delete
+      parameters: # form parameters
+        name1: value1 # name value pair
+        name2: value2
+      headers: # request headers 
+        name1: value1 # name value pair
+        name2: value2
+      cookies: #request cookies
+        name1: value1 # name value pair
+        name2: value2
+      body: value #request body data
+
+    response: #http response data to be verified
+      status: # response status code
+      headers: # response headers
+        name1: value1 # name value pair
+        name2: value2
+      cookies: #  response cookies
+        name1: value1 # name value pair
+        name2: value2
+      body: # response body data verification
+       asserts: # you can write multiple asserts to validate different part of json response
+       - select: #jsonpath / reqular expressions
+         value: # value to be matched
+       - select:
+         value: 
+```
+## Define variables. 
+Variables can be defined inside the initGroup and they have global scope. that means you use these variables anywhere. You can reference these variables like ${variableName} to assign values to a header, a cookie and in a request uri. You can also assign values to these variables from REST response and refer the value in subsequent tests.
 - Example:
   - define variables
 
@@ -158,8 +207,15 @@ testGroup:
                                 value: v2
 ```
 
+# Json comparision
+#todo
+
+# Regex comparision
+#todo
+
 # References
-- http://jsonassert.skyscreamer.org/cookbook.html
 - https://github.com/json-path/JsonPath
+- https://github.com/lukas-krecan/JsonUnit
 - https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
+- http://docs.bvstools.com/home/ssl-documentation/exporting-certificate-authorities-cas-from-a-website
 
