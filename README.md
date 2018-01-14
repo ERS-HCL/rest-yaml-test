@@ -1,4 +1,7 @@
-Test your REST API without writing any script in any language. This test framework lets you write your test cases in in simple YAML format. Currently only json response is supported. We use JsonPath and JsonUnit and Java regular expression libraries to provide you simple and elegant way of validating your json response. You can select a portion of http json response by JsonPath expression and regular expression then validate it with JsonUnit. You can also combine multiple JsonPath expressions and regular expressions in a Unix like pipe fashion to precisely select subset of json response and then validate it.
+
+Test your REST API without writing any script in any language. 
+
+This test framework lets you write your test cases in in simple YAML format. Currently only json response is supported. We use JsonPath and JsonUnit and Java regular expression libraries to provide you simple and elegant way of validating your json response. You can select a subset of json response by providing JsonPath expression and/or regular expression then validate it with JsonUnit. You can also combine multiple JsonPath expressions and regular expressions in a Unix like pipe fashion to precisely select a subset of json response and then validate it.
 
 Read below simple example.
 
@@ -46,7 +49,7 @@ This is a Java Maven project. Java 1.8 and Maven is required. Follow below steps
 - If you want to run test from Eclipse IDE then import this maven project into Eclipse and right click "MainTest" class and run it as junit test. This test framework uses Junit5 so Eclipse IDE  Oxygen.2 Release (4.7.2) or higher is supported but you can run test as maven from lower version of Eclipse.
 
 # SSL certificates support
-If you are using HTTPS protocol then you need to add certificates in "src/test/resources/configuration.properties" file like follows. How to export certificates read references. 
+If you are using HTTPS protocol then you need to add certificates in "src/test/resources/configuration.properties" file like follows. Go to references to know how to export certificates. 
 
 ```
 certificates=certificates/httpbin.cer,certificates/alice.crt, certificates/bob.crt, certificates/carol.crt
@@ -54,8 +57,8 @@ certificates=certificates/httpbin.cer,certificates/alice.crt, certificates/bob.c
 
 # How to write test cases?
 Quickest way to start is to read "src/test/resources/test-1.yaml" test file.
-A test case is a REST API call with HTTP request data to be sent and HTTP response data to be verified by the framework.
-Multiple test cases can be assigned into a testGroup. A testGroup is a collection of test cases to be executed in a sequence.
+
+A test case is a REST API call with HTTP request data to be sent to a server and HTTP response data to be verified by the framework. A test group is a collection of test cases to be executed in a defined sequence.
 
 Basic structure of simple test case is follows:
 ```
@@ -94,10 +97,9 @@ testGroup: # array of test group.
        - select:
          value: 
 ```
-## Define variables. 
-Variables can be defined inside the initGroup and they have global scope. that means you use these variables anywhere. You can reference these variables like ${variableName} to assign values to a header, a cookie and in a request uri. You can also assign values to these variables from REST response and refer the value in subsequent tests.
-- Example:
-  - define variables
+## How to use variables. 
+Variables can be defined inside the initGroup and they have global scope. You can reference these variables like **${variableName}** in the request header, cookies, body and uri values and response header, cookies and assert values. You can also assign values to these variables from response and refer the value in subsequent tests.
+- Example - Define variable :
 
 ```
 initGroup:
@@ -109,7 +111,7 @@ initGroup:
     country: US
 ```
 
-  - use variables
+- Example - Use variables
 
 ```
 testGroup:
@@ -129,7 +131,7 @@ testGroup:
               content-type: {$contentType} #assert that content-type header is application/json
 ```
 
-  - assign value to a variable from response.
+  - Example - Assign value to a variable from response.
 ```
 testGroup:
   -
@@ -147,9 +149,7 @@ testGroup:
                 skuId: body.response.skuId # assign value extracted from json response using "response.skuId" JsonPath expression for json path expression refer https://github.com/json-path/JsonPath
 ```
 
-- Create testGroup. You can create multiple testGroups one for each test scenerio. One testGroup can have multiple REST requests defined as test inside the testGroup. 
-- Examples:
-  - Create test groups
+- Examples - Create test groups
 
 ```
 testGroup:
@@ -162,7 +162,7 @@ testGroup:
      .....
 ```
 
-  - Create tests
+  - Example - Create tests
 
 ```
 testGroup:
@@ -170,7 +170,7 @@ testGroup:
      ....
      tests:
             -
-                name: first rest request
+                name: first rest call
                 request:
                     uri: /cart/get/cart/${cartId} # request uri hostname and port is picked up from baseURI from application.properties file.
                     method: get/post/put/delete # use any of these values
@@ -183,7 +183,7 @@ testGroup:
                             "c":"d"
                         }
                 response:
-                    status: {$status} # assert that http response status is 200
+                    status: ${status} # assert that http response status is 200
                     header: # add key value pairs to assert on header values
                         content-type: {$contentType} #assert that content-type header value
                     body:
@@ -194,7 +194,6 @@ testGroup:
                                        [v1,v2] # if the return value from json path is list of atomic values you can match them with comma separated values like this.
                             -
                                 select: jsonpath args # json path expression
-                                match: strict # if the return value from json path is json then JsonAssert is used to match expected and actual values refer http://jsonassert.skyscreamer.org/cookbook.html
                                 value: | # expected json value
                                     {
                                         "foo": [
@@ -207,15 +206,14 @@ testGroup:
                                 value: v2
 ```
 
-# Json comparision
-#todo
+# How to do Json comparison
+Read  https://github.com/lukas-krecan/JsonUnit
 
-# Regex comparision
-#todo
+# How to write JsonPath expression
+Read https://github.com/json-path/JsonPath
+
+# How to write regular expression
+https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
 
 # References
-- https://github.com/json-path/JsonPath
-- https://github.com/lukas-krecan/JsonUnit
-- https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
 - http://docs.bvstools.com/home/ssl-documentation/exporting-certificate-authorities-cas-from-a-website
-
