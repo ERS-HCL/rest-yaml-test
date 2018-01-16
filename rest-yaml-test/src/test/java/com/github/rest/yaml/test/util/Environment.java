@@ -4,17 +4,23 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigException;
 import com.typesafe.config.ConfigFactory;
 
 public class Environment {
 
 	private static final String ENV = "env";
+	private static final String BASE_URL = "baseURL";
+	private static final String PORT = "port";
+	private static final String TAGS = "tags";
+	
 	private Config conf;
 	private int port;
 	private String baseURL;
 	private boolean logDebug;
 	private List<String> testFiles;
 	private List<String> certificates;
+	private List<String> tags;
 	private static Environment env;
 
 	public static Environment instance() {
@@ -25,18 +31,45 @@ public class Environment {
 	}
 
 	private Environment() {
-		String env = getEnv();
-		if (env == null) {
+
+		if (getEnv(ENV) == null) {
 			conf = ConfigFactory.load("configuration");
 		} else {
 			conf = ConfigFactory.load("configuration-" + env);
 		}
-
-		baseURL = conf.getString("server.baseURI");
-		port = conf.getInt("server.port");
+		
+		baseURL = getEnv(BASE_URL);
+		if (baseURL == null) {
+			baseURL = conf.getString("server.baseURI");
+		}
+		
+		
+		if(getEnv(PORT) == null) {
+			port = conf.getInt("server.port");
+		} else {
+			try {
+				port = Integer.parseInt(getEnv(PORT));
+			} catch(NumberFormatException e) {
+				throw new TestException("Port number should be number.", e);
+			}
+		}
+		
+		if(getEnv(TAGS) == null) {
+			try {
+				if (conf.getString(TAGS) != null) {
+					tags = Arrays.asList(conf.getString(TAGS).split("[\\s,]+"));
+				}
+			} catch (ConfigException e) {
+				// ignore
+			}
+		} else {
+			tags = Arrays.asList(getEnv(TAGS).split("[\\s,]+"));
+		}
+		
 		logDebug = conf.getBoolean("logDebug");
 		testFiles = Arrays.asList(conf.getString("testFiles").split("[\\s,]+"));
 		certificates = Arrays.asList(conf.getString("certificates").split("[\\s,]+"));
+		
 	}
 
 	public boolean getLogDebug() {
@@ -59,12 +92,16 @@ public class Environment {
 		return certificates;
 	}
 	
-	private String getEnv() {
-		final String env = System.getProperty(ENV);
+	private String getEnv(String name) {
+		final String env = System.getProperty(name);
 		if (env != null) {
 			return env;
 		} else {
 			return null;
 		}
+	}
+
+	public List<String> getTags() {
+		return tags;
 	}
 }

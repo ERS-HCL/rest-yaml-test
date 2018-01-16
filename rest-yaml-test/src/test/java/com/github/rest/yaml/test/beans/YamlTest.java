@@ -1,9 +1,11 @@
 package com.github.rest.yaml.test.beans;
 
+import java.util.List;
+
 public class YamlTest {
 	
 	private String name;
-	private boolean skip;
+	private List<String> tags;
 	private YamlRequest request;
 	private YamlResponse response;
 
@@ -31,12 +33,12 @@ public class YamlTest {
 		this.response = response;
 	}
 
-	public boolean isSkip() {
-		return skip;
+	public List<String> getTags() {
+		return tags;
 	}
 
-	public void setSkip(boolean skip) {
-		this.skip = skip;
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 
 }

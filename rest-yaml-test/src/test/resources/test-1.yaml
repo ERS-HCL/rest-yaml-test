@@ -76,7 +76,6 @@ testGroup:
           value: uuid-1
           
 - name: body assert
-  skip: false # make is true to skip this testGroup
   tests:
   - name: pipe
     request:
@@ -89,8 +88,10 @@ testGroup:
         - select: jsonpath args | jsonpath foo
           value: |
                  ["vs1","v2"]
-        - select: jsonpath args | jsonpath foo | regex.find v\d
+        - select: jsonpath args | jsonpath foo | regex.find v\d # regex.find returns array of value matched
           value: '["v2"]'
+        - select: jsonpath args | jsonpath foo | regex.match v\d # regex.match returns number of matches
+          value: 1
 
   - name: json-unit
     request:

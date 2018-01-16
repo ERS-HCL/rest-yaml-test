@@ -5,7 +5,7 @@ import java.util.List;
 public class YamlTestGroup {
 	
 	private String name;
-	private boolean skip;
+	private List<String> tags;
 	private List<YamlTest> tests;
 
 	public List<YamlTest> getTests() {
@@ -24,12 +24,12 @@ public class YamlTestGroup {
 		this.name = name;
 	}
 
-	public boolean isSkip() {
-		return skip;
+	public List<String> getTags() {
+		return tags;
 	}
 
-	public void setSkip(boolean skip) {
-		this.skip = skip;
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 
 }

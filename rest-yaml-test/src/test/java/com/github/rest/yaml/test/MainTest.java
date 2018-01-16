@@ -31,7 +31,9 @@ public class MainTest extends AbstractITest {
 		abstractSetUp();
 		yamlInitGroup = getInitGroup();
 		CertificateLoader.instance().loadCertificates(certificates);
-		logger.info("certificates loading done.");
+		logger.info("Certificates loading done.");
+		logger.info("baseURL="+baseURL+" port="+port);
+		logger.info("tags="+tags);
 		yamlTestGroups = getTestGroups();
 		yamlDataGroup = getDataGroup();
 	}
@@ -42,17 +44,13 @@ public class MainTest extends AbstractITest {
 		Collection<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
 
 		for (YamlTestGroup yamlTestGroup : yamlTestGroups) {
-			if (yamlTestGroup.isSkip()) {
-				logger.info("->skipped testGroup name=" + yamlTestGroup.getName());
+			if (!tagExist(yamlTestGroup)) {
+				logger.info("->skipped tag does not exist for testGroup name=" + yamlTestGroup.getName());
 				continue;
 			}
 
 			for (YamlTest yamlTest : yamlTestGroup.getTests()) {
-				if (yamlTest.isSkip()) {
-					logger.info("-->skipped test =" + yamlTest.getName() + ", testGroup =" + yamlTestGroup.getName());
-					continue;
-				}
-
+				
 				final String testcaseName = "testGroup=" + yamlTestGroup.getName() + ", test=" + yamlTest.getName();
 				Executable executable = setupTest(yamlTestGroup, yamlTest, testcaseName);
 				DynamicTest dTest = DynamicTest.dynamicTest(testcaseName, executable);
@@ -84,5 +82,19 @@ public class MainTest extends AbstractITest {
 		};
 
 		return executable;
+	}
+	
+	private boolean tagExist(YamlTestGroup yamlTestGroup) {
+		if(tags==null) {
+			return true;
+		}
+		
+		for(String tag: tags) {
+			if(yamlTestGroup.getTags()!= null && yamlTestGroup.getTags().contains(tag)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
