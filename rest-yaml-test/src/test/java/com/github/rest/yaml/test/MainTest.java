@@ -17,6 +17,7 @@ import com.github.rest.yaml.test.beans.YamlInitGroup;
 import com.github.rest.yaml.test.beans.YamlTest;
 import com.github.rest.yaml.test.beans.YamlTestGroup;
 import com.github.rest.yaml.test.certificate.CertificateLoader;
+import com.github.rest.yaml.test.util.Environment;
 import com.jayway.restassured.specification.RequestSpecification;
 
 public class MainTest extends AbstractITest {
@@ -33,7 +34,7 @@ public class MainTest extends AbstractITest {
 		CertificateLoader.instance().loadCertificates(certificates);
 		logger.info("Certificates loading done.");
 		logger.info("baseURL="+baseURL+" port="+port);
-		logger.info("tags="+tags);
+		logger.info("groupTags="+Environment.instance().getGroupTags()+", testTags="+Environment.instance().getTestTags());
 		yamlTestGroups = getTestGroups();
 		yamlDataGroup = getDataGroup();
 	}
@@ -44,14 +45,23 @@ public class MainTest extends AbstractITest {
 		Collection<DynamicTest> dynamicTests = new ArrayList<DynamicTest>();
 
 		for (YamlTestGroup yamlTestGroup : yamlTestGroups) {
-			if (!tagExist(yamlTestGroup)) {
-				logger.info("->skipped tag does not exist for testGroup name=" + yamlTestGroup.getName());
+			if (!yamlTestGroup.isTagged()) {
+				logger.info("->testGroup skipped tag does not exist for testGroup name=" 
+			                + yamlTestGroup.getName()+", tags="+yamlTestGroup.getTags());
 				continue;
 			}
 
 			for (YamlTest yamlTest : yamlTestGroup.getTests()) {
+				final String testcaseName = "testGroup=" + yamlTestGroup.getName()
+				                            + ", test=" + yamlTest.getName()
+				                            + ", group tags="+yamlTestGroup.getTags()
+				                            + ", test tags="+yamlTest.getTags();
+				if (!yamlTest.isTagged()) {
+					logger.info("->test skipped tag does not exist " + testcaseName);
+					continue;
+				}
 				
-				final String testcaseName = "testGroup=" + yamlTestGroup.getName() + ", test=" + yamlTest.getName();
+				
 				Executable executable = setupTest(yamlTestGroup, yamlTest, testcaseName);
 				DynamicTest dTest = DynamicTest.dynamicTest(testcaseName, executable);
 				dynamicTests.add(dTest);
@@ -84,17 +94,4 @@ public class MainTest extends AbstractITest {
 		return executable;
 	}
 	
-	private boolean tagExist(YamlTestGroup yamlTestGroup) {
-		if(tags==null) {
-			return true;
-		}
-		
-		for(String tag: tags) {
-			if(yamlTestGroup.getTags()!= null && yamlTestGroup.getTags().contains(tag)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
 }

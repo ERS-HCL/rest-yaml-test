@@ -24,7 +24,6 @@ public abstract class AbstractITest {
 	public static int port;
 	public static String baseURL;
 	public static List<String> certificates;
-	public static List<String> tags;
 	public static RequestSpecification rspec;
 	public static TestData testData = new TestData(Environment.instance());
 	static Logger logger = new Logger();
@@ -33,7 +32,6 @@ public abstract class AbstractITest {
 		baseURL = Environment.instance().getBaseURL();
 		port = Environment.instance().getPort();
 		certificates = Environment.instance().getCertificates();
-		tags = Environment.instance().getTags();
 		
 		final RequestSpecBuilder build = new RequestSpecBuilder().setBaseUri(baseURL).setPort(port);
 		rspec = build.build();

@@ -2,6 +2,8 @@ package com.github.rest.yaml.test.beans;
 
 import java.util.List;
 
+import com.github.rest.yaml.test.util.Environment;
+
 public class YamlTest {
 	
 	private String name;
@@ -9,6 +11,20 @@ public class YamlTest {
 	private YamlRequest request;
 	private YamlResponse response;
 
+	public boolean isTagged() {
+		if(Environment.instance().getTestTags()==null) {
+			return true;
+		}
+		
+		for(String tag: Environment.instance().getTestTags()) {
+			if(tags!= null && tags.contains(tag)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public String getName() {
 		return name;
 	}

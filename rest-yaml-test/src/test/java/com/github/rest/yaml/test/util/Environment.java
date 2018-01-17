@@ -12,7 +12,8 @@ public class Environment {
 	private static final String ENV = "env";
 	private static final String BASE_URL = "baseURL";
 	private static final String PORT = "port";
-	private static final String TAGS = "tags";
+	private static final String GTAGS = "groupTags";
+	private static final String TTAGS = "testTags";
 	
 	private Config conf;
 	private int port;
@@ -20,7 +21,8 @@ public class Environment {
 	private boolean logDebug;
 	private List<String> testFiles;
 	private List<String> certificates;
-	private List<String> tags;
+	private List<String> groupTags;
+	private List<String> testTags;
 	private static Environment env;
 
 	public static Environment instance() {
@@ -54,16 +56,28 @@ public class Environment {
 			}
 		}
 		
-		if(getEnv(TAGS) == null) {
+		if(getEnv(GTAGS) == null) {
 			try {
-				if (conf.getString(TAGS) != null) {
-					tags = Arrays.asList(conf.getString(TAGS).split("[\\s,]+"));
+				if (conf.getString(GTAGS) != null) {
+					groupTags = Arrays.asList(conf.getString(GTAGS).split("[\\s,]+"));
 				}
 			} catch (ConfigException e) {
 				// ignore
 			}
 		} else {
-			tags = Arrays.asList(getEnv(TAGS).split("[\\s,]+"));
+			groupTags = Arrays.asList(getEnv(GTAGS).split("[\\s,]+"));
+		}
+		
+		if(getEnv(TTAGS) == null) {
+			try {
+				if (conf.getString(TTAGS) != null) {
+					testTags = Arrays.asList(conf.getString(TTAGS).split("[\\s,]+"));
+				}
+			} catch (ConfigException e) {
+				// ignore
+			}
+		} else {
+			testTags = Arrays.asList(getEnv(TTAGS).split("[\\s,]+"));
 		}
 		
 		logDebug = conf.getBoolean("logDebug");
@@ -101,7 +115,12 @@ public class Environment {
 		}
 	}
 
-	public List<String> getTags() {
-		return tags;
+	public List<String> getGroupTags() {
+		return groupTags;
 	}
+
+	public List<String> getTestTags() {
+		return testTags;
+	}
+
 }

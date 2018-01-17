@@ -37,6 +37,7 @@ testGroup:
         content-type: application/json
         
 - name: test group to show to show how to test body asserts
+  tags: ["bodyAssert"]
   tests:
   - name: simple body asset test
     request:
@@ -76,8 +77,10 @@ testGroup:
           value: uuid-1
           
 - name: body assert
+  tags: ["bodyAssert"]
   tests:
   - name: pipe
+    tags: ["pipe"]
     request:
       uri: /get?foo=vs1&foo=v2
       method: get
@@ -94,6 +97,7 @@ testGroup:
           value: 1
 
   - name: json-unit
+    tags: ["jsonUnit"]
     request:
       uri: /get?foo=vs1&foo=v2
       method: get
