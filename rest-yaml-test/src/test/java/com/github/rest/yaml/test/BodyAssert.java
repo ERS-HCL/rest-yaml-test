@@ -4,6 +4,7 @@ import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
 import static net.javacrumbs.jsonunit.core.Option.IGNORING_EXTRA_FIELDS;
 import static net.javacrumbs.jsonunit.core.Option.TREATING_NULL_AS_ABSENT;
+import static net.javacrumbs.jsonunit.core.Option.IGNORING_EXTRA_ARRAY_ITEMS;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -60,7 +61,7 @@ public class BodyAssert {
 	}
 	
 	private void jsonAssert(YamlBodyAssert bodyAssert, Object map) {
-		JsonAssert.setOptions(IGNORING_ARRAY_ORDER, IGNORING_EXTRA_FIELDS, TREATING_NULL_AS_ABSENT);
+		JsonAssert.setOptions(IGNORING_ARRAY_ORDER, IGNORING_EXTRA_ARRAY_ITEMS, IGNORING_EXTRA_FIELDS, TREATING_NULL_AS_ABSENT);
 		String expected = bodyAssert.getValue();
 		String actual = JsonMapper.toJson(map);
 		log(bodyAssert, expected, actual);

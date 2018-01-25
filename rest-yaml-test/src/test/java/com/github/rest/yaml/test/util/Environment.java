@@ -38,7 +38,7 @@ public class Environment {
 		if (getEnv(ENV) == null) {
 			conf = ConfigFactory.load("configuration");
 		} else {
-			conf = ConfigFactory.load("configuration-" + env);
+			conf = ConfigFactory.load("configuration-" + getEnv(ENV));
 		}
 		
 		baseURL = getEnv(BASE_URL);
