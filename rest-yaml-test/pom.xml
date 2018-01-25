@@ -140,6 +140,26 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<configuration>
+							<tasks>
+								<replace token="tests()" value="com.github.rest.yaml.test.MainTest"
+									dir="target/surefire-reports">
+									<include name="**/*.xml" />
+								</replace>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 </project>

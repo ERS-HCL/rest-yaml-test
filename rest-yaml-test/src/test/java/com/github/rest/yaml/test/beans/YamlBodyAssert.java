@@ -45,7 +45,7 @@ public class YamlBodyAssert {
 				select = ExpressionType.jsonpath + " " + jsonPath;
 			}
 		}
-		return select;
+		return CurrentState.getYamlInitGroup().replaceVariable(select);
 	}
 
 	public void setSelect(String select) {

@@ -1,23 +1,20 @@
 package com.github.rest.yaml.test;
 
+import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
+import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
+import static net.javacrumbs.jsonunit.core.Option.IGNORING_EXTRA_FIELDS;
+import static net.javacrumbs.jsonunit.core.Option.TREATING_NULL_AS_ABSENT;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static net.javacrumbs.jsonunit.JsonAssert.*;
-import static net.javacrumbs.jsonunit.core.Option.*;
 
 import com.github.rest.yaml.test.beans.YamlBodyAssert;
 import com.github.rest.yaml.test.beans.YamlTest;
 import com.github.rest.yaml.test.expression.BodyAssertSelectExpression;
 import com.github.rest.yaml.test.util.JsonMapper;
 import com.github.rest.yaml.test.util.Logger;
-import com.github.rest.yaml.test.util.TestException;
-import com.jayway.jsonpath.JsonPath;
 import com.jayway.restassured.response.Response;
 
 import net.javacrumbs.jsonunit.JsonAssert;
@@ -48,40 +45,11 @@ public class BodyAssert {
 	private void doAssert(YamlBodyAssert bodyAssert) {
 		Object value = BodyAssertSelectExpression.build(bodyAssert).eval(response);
 		if (value instanceof Map) {
-			jsonAssert(bodyAssert, (Map) value);
+			jsonAssert(bodyAssert, value);
 		} else if (value instanceof List) {
-			List<Object> v = ((List<Object>) value);
-			if (v.isEmpty()) {
-				throw new TestException("Evaluation of select expression return empty list test=" + yamlTest.getName() + " select=" + bodyAssert.getSelect());
-			}
-			if (v.get(0) instanceof Map) {
-				jsonAssert(bodyAssert, (Map) v);
-			} else {
-				atomicCollectionAssert(bodyAssert, v);
-			}
-
+			jsonAssert(bodyAssert, value);
 		} else {
 			atomicAssert(bodyAssert, value.toString());
-		}
-	}
-	
-	private void atomicCollectionAssert(YamlBodyAssert bodyAssert, List<Object> actual) {
-		List<Object> expected = new ArrayList<Object>();
-		try {
-			expected = JsonPath.parse(bodyAssert.getValue()).read("$");
-		} catch (Throwable e) {
-			throw new TestException("Parsing error for test= " + yamlTest.getName() 
-			                        + " , expected value=" + bodyAssert.getValue()
-			                        + " , select=" + bodyAssert.getSelect() 
-			                        + " , expected value should be array in [\"v1\",\"v2\"] format.\n", e);
-		}
-		
-		if(bodyAssert.getMatch() != null && bodyAssert.getMatch().equalsIgnoreCase("hasItems")) {
-			log(bodyAssert, expected, actual);
-			assertThat(actual, hasItems(expected.toArray()));
-		} else {
-			log(bodyAssert, expected, actual);
-			assertThat(actual, equalTo(expected));
 		}
 	}
 	
@@ -91,7 +59,7 @@ public class BodyAssert {
 		assertThat(actual, equalTo(expected));
 	}
 	
-	private void jsonAssert(YamlBodyAssert bodyAssert, Map map) {
+	private void jsonAssert(YamlBodyAssert bodyAssert, Object map) {
 		JsonAssert.setOptions(IGNORING_ARRAY_ORDER, IGNORING_EXTRA_FIELDS, TREATING_NULL_AS_ABSENT);
 		String expected = bodyAssert.getValue();
 		String actual = JsonMapper.toJson(map);

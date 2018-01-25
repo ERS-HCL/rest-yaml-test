@@ -14,11 +14,12 @@ public class Environment {
 	private static final String PORT = "port";
 	private static final String GTAGS = "groupTags";
 	private static final String TTAGS = "testTags";
+	private static final String LOG_LEVEL = "logLevel";
 	
 	private Config conf;
 	private int port;
 	private String baseURL;
-	private boolean logDebug;
+	private String logLevel;
 	private List<String> testFiles;
 	private List<String> certificates;
 	private List<String> groupTags;
@@ -80,14 +81,20 @@ public class Environment {
 			testTags = Arrays.asList(getEnv(TTAGS).split("[\\s,]+"));
 		}
 		
-		logDebug = conf.getBoolean("logDebug");
+		if(getEnv(LOG_LEVEL) == null) {
+			logLevel = conf.getString(LOG_LEVEL);
+		} else {
+			logLevel = getEnv(LOG_LEVEL);
+		}
+		
+		logLevel = conf.getString(LOG_LEVEL);
 		testFiles = Arrays.asList(conf.getString("testFiles").split("[\\s,]+"));
 		certificates = Arrays.asList(conf.getString("certificates").split("[\\s,]+"));
 		
 	}
 
-	public boolean getLogDebug() {
-		return logDebug;
+	public String getLogLevel() {
+		return logLevel;
 	}
 
 	public String getBaseURL() {

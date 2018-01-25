@@ -25,10 +25,10 @@ public class RestResponse {
 
 	public void doAssert() {
 		assertThat(response.statusCode(), equalTo(yamlTest.getResponse().getStatus()));
+		CurrentState.getYamlInitGroup().storeVariableValue(yamlTest, response);
 		headersAssert();
 		cookiesAssert();
 		BodyAssert.build(response, yamlTest).doAssert();
-		CurrentState.getYamlInitGroup().storeVariableValue(yamlTest, response);
 	}
 
 	private void headersAssert() {

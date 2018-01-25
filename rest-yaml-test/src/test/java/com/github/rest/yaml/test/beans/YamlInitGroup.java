@@ -6,8 +6,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.github.rest.yaml.test.CurrentState;
+import com.github.rest.yaml.test.util.JsonMapper;
 import com.github.rest.yaml.test.util.Logger;
 import com.github.rest.yaml.test.util.Regex;
+import com.jayway.jsonpath.JsonPath;
 import com.jayway.restassured.response.Response;
 
 public class YamlInitGroup {
@@ -97,7 +99,7 @@ public class YamlInitGroup {
 						String regExPattern = entry.getValue().substring(10);
 						value = (String) Regex.find(regExPattern, response.body().asString());
 					} else {
-						value = response.body().jsonPath().getString(entry.getValue().substring(5));
+						value = JsonMapper.toJson(JsonPath.parse(response.body().asString()).read(entry.getValue().substring(5)));				
 					}
 					logger.debug("variable value from body " + variable + "=" + value);
 					getVariables().put(variable, value);

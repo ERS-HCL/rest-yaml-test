@@ -77,7 +77,7 @@ public class MainTest extends AbstractITest {
 		RequestSpecification rs = given().spec(rspec);
 
 		Executable executable = () -> {
-			logger.info("\n\n\n-->start " + testcaseName);
+			logger.log("\n\n\n-->start " + testcaseName);
 			// Initialize current state to be access globally
 			CurrentState.setState(yamlInitGroup, yamlTestGroup, yamlDataGroup, yamlTest);
 
@@ -88,7 +88,6 @@ public class MainTest extends AbstractITest {
 				throw e;
 			}
 
-			logger.info("-->end " + testcaseName +"\n\n\n");
 		};
 
 		return executable;
