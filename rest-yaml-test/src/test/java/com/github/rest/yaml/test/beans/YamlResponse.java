@@ -13,7 +13,7 @@ public class YamlResponse {
 	private int status;
 
 	public Map<String, String> getHeaders() {
-		headers = CurrentState.getYamlInitGroup().replaceVariable(headers);
+		headers = CurrentState.getCurrentYamlTest().replaceVariable(headers);
 		return headers;
 	}
 
@@ -38,7 +38,7 @@ public class YamlResponse {
 	}
 
 	public Map<String, String> getCookies() {
-		cookies = CurrentState.getYamlInitGroup().replaceVariable(cookies);
+		cookies = CurrentState.getCurrentYamlTest().replaceVariable(cookies);
 		return cookies;
 	}
 

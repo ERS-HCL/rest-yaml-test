@@ -9,6 +9,7 @@ import java.util.Map;
 import com.github.rest.yaml.test.beans.YamlDataGroup;
 import com.github.rest.yaml.test.beans.YamlInitGroup;
 import com.github.rest.yaml.test.beans.YamlTestGroup;
+import com.github.rest.yaml.test.beans.YamlTestTemplateGroup;
 import com.github.rest.yaml.test.data.TestData;
 import com.github.rest.yaml.test.util.Environment;
 import com.github.rest.yaml.test.util.JsonMapper;
@@ -51,6 +52,11 @@ public abstract class AbstractITest {
 	public static YamlInitGroup getInitGroup() {
 		YamlInitGroup initGroup = JsonMapper.toObject(testData.getTestData().getObject("initGroup", Map.class),YamlInitGroup.class);
 		return initGroup;
+	}
+	
+	public static YamlTestTemplateGroup getTestTemplateGroup() {
+		YamlTestTemplateGroup yamlTestTemplateGroup = JsonMapper.toObject(testData.getTestData().getObject("testTemplateGroup", Map.class),YamlTestTemplateGroup.class);
+		return yamlTestTemplateGroup;
 	}
 	
 	public static YamlDataGroup getDataGroup() {

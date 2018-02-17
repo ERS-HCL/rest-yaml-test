@@ -77,8 +77,9 @@ public class BodyAssert {
 	}
 	
 	public static void main(String[] args) {
-		JsonAssert.setOptions(IGNORING_ARRAY_ORDER, IGNORING_EXTRA_FIELDS, TREATING_NULL_AS_ABSENT);
-		assertJsonEquals("{\"test\":[{\"key\":1},{\"key\":2},{\"key\":3}]}", 
-			    "{\"test\":[{\"key\":3},{\"key\":2, \"extraField\":2},{\"key\":1}]}");
+		JsonAssert.setOptions(IGNORING_ARRAY_ORDER, IGNORING_EXTRA_ARRAY_ITEMS, IGNORING_EXTRA_FIELDS, TREATING_NULL_AS_ABSENT);
+		//assertJsonEquals("{\"test\":[{\"key\":1},{\"key\":2},{\"key\":3}]}", "{\"test\":[{\"key\":3},{\"key\":2, \"extraField\":2},{\"key\":1}]}");
+		assertJsonEquals("[{\"test\":{\"key\":\"${json-unit.any-number}\"}}]", "[{\"test\":{\"key\":1}, \"test2\":{\"key\":1}}]");
+		//assertJsonEquals("{\"test\":\"${json-unit.any-number}\"}", "{\"test\":1.1}");
 	}
 }

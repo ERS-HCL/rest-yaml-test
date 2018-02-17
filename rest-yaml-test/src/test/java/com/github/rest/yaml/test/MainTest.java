@@ -16,6 +16,7 @@ import com.github.rest.yaml.test.beans.YamlDataGroup;
 import com.github.rest.yaml.test.beans.YamlInitGroup;
 import com.github.rest.yaml.test.beans.YamlTest;
 import com.github.rest.yaml.test.beans.YamlTestGroup;
+import com.github.rest.yaml.test.beans.YamlTestTemplateGroup;
 import com.github.rest.yaml.test.certificate.CertificateLoader;
 import com.github.rest.yaml.test.util.Environment;
 import com.jayway.restassured.specification.RequestSpecification;
@@ -26,6 +27,7 @@ public class MainTest extends AbstractITest {
 	private static List<YamlTestGroup> yamlTestGroups;
 	private static YamlInitGroup yamlInitGroup;
 	private static YamlDataGroup yamlDataGroup;
+	private static YamlTestTemplateGroup yamlTestTemplateGroup;
 	
 	@BeforeAll
 	public static void setUp() throws Exception {
@@ -37,6 +39,7 @@ public class MainTest extends AbstractITest {
 		logger.info("groupTags="+Environment.instance().getGroupTags()+", testTags="+Environment.instance().getTestTags());
 		yamlTestGroups = getTestGroups();
 		yamlDataGroup = getDataGroup();
+		yamlTestTemplateGroup = getTestTemplateGroup();
 	}
 
 	@TestFactory
@@ -79,7 +82,7 @@ public class MainTest extends AbstractITest {
 		Executable executable = () -> {
 			logger.log("\n\n\n-->start " + testcaseName);
 			// Initialize current state to be access globally
-			CurrentState.setState(yamlInitGroup, yamlTestGroup, yamlDataGroup, yamlTest);
+			CurrentState.setState(yamlInitGroup, yamlTestGroup, yamlDataGroup, yamlTestTemplateGroup, yamlTest);
 
 			try {
 				RestRequest.build(rs, yamlTest).request().doAssert();

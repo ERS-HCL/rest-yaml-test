@@ -4,6 +4,7 @@ import com.github.rest.yaml.test.beans.YamlDataGroup;
 import com.github.rest.yaml.test.beans.YamlInitGroup;
 import com.github.rest.yaml.test.beans.YamlTest;
 import com.github.rest.yaml.test.beans.YamlTestGroup;
+import com.github.rest.yaml.test.beans.YamlTestTemplateGroup;
 
 /*
  * Global state, access by every class for logging and variable operations.
@@ -13,6 +14,7 @@ public class CurrentState {
 	private static YamlInitGroup yamlInitGroup; // Only one global yamlInitGroup
 	private static YamlTestGroup currentYamlTestGroup;
 	private static YamlDataGroup yamlDataGroup;
+	private static YamlTestTemplateGroup yamlTestTemplateGroup;
 	private static YamlTest currentYamlTest;
 	
 	
@@ -21,10 +23,11 @@ public class CurrentState {
 	}
 
 	// all states to be set at once and in one place so to avoid global state management issues.
-	public static void setState(YamlInitGroup yamlInitGroup, YamlTestGroup currentYamlTestGroup, YamlDataGroup yamlDataGroup, YamlTest currentYamlTest) {
+	public static void setState(YamlInitGroup yamlInitGroup, YamlTestGroup currentYamlTestGroup, YamlDataGroup yamlDataGroup, YamlTestTemplateGroup yamlTestTemplateGroup, YamlTest currentYamlTest) {
 		CurrentState.yamlInitGroup = yamlInitGroup;
 		CurrentState.currentYamlTestGroup = currentYamlTestGroup;
 		CurrentState.yamlDataGroup = yamlDataGroup;
+		CurrentState.yamlTestTemplateGroup = yamlTestTemplateGroup;
 		CurrentState.currentYamlTest = currentYamlTest;
 	}
 
@@ -40,4 +43,8 @@ public class CurrentState {
 		return yamlDataGroup;
 	}
 
+	public static YamlTestTemplateGroup getYamlTestTemplateGroup() {
+		return yamlTestTemplateGroup;
+	}
+	
 }

@@ -28,7 +28,7 @@ public class YamlBodyAssert {
 	}
 
 	public String getValue() {
-		value = CurrentState.getYamlInitGroup().replaceVariable(value);
+		value = CurrentState.getCurrentYamlTest().replaceVariable(value);
 		return value;
 	}
 
@@ -45,7 +45,7 @@ public class YamlBodyAssert {
 				select = ExpressionType.jsonpath + " " + jsonPath;
 			}
 		}
-		return CurrentState.getYamlInitGroup().replaceVariable(select);
+		return CurrentState.getCurrentYamlTest().replaceVariable(select);
 	}
 
 	public void setSelect(String select) {

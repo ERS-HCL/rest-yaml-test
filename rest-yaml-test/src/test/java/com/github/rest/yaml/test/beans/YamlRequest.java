@@ -15,7 +15,7 @@ public class YamlRequest {
 	private boolean encodeURL;
 
 	public String getUri() {
-		uri = CurrentState.getYamlInitGroup().replaceVariable(uri);
+		uri = CurrentState.getCurrentYamlTest().replaceVariable(uri);
 		return uri;
 	}
 
@@ -24,7 +24,7 @@ public class YamlRequest {
 	}
 
 	public Map<String, String> getHeaders() {
-		headers = CurrentState.getYamlInitGroup().replaceVariable(headers);
+		headers = CurrentState.getCurrentYamlTest().replaceVariable(headers);
 		return headers;
 	}
 
@@ -33,7 +33,7 @@ public class YamlRequest {
 	}
 
 	public String getBody() {
-		body = CurrentState.getYamlInitGroup().replaceVariable(body);
+		body = CurrentState.getCurrentYamlTest().replaceVariable(body);
 		return body;
 	}
 
@@ -50,7 +50,7 @@ public class YamlRequest {
 	}
 
 	public Map<String, String> getParameters() {
-		parameters = CurrentState.getYamlInitGroup().replaceVariable(parameters);
+		parameters = CurrentState.getCurrentYamlTest().replaceVariable(parameters);
 		return parameters;
 	}
 
@@ -59,7 +59,7 @@ public class YamlRequest {
 	}
 
 	public Map<String, String> getCookies() {
-		cookies = CurrentState.getYamlInitGroup().replaceVariable(cookies);
+		cookies = CurrentState.getCurrentYamlTest().replaceVariable(cookies);
 		return cookies;
 	}
 

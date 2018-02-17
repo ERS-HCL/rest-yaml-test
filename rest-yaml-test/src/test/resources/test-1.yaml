@@ -12,7 +12,25 @@ dataGroup:
                        "v2"
                      ]
             }
-    
+
+
+testTemplateGroup:
+  templates:
+  - name: sampleTestTemplate
+    request:
+      uri: /get?foo=v1&foo=v2
+      method: get
+      headers:
+        content-type: ${content-type}
+        uuid: uuid-1
+    response:
+      status: 200
+      body:
+        asserts:
+        - jsonPath: args.foo
+          value: ${args_foo_value}
+
+        
 testGroup:
 - name: test group to show uri, method, parameters, headers and cookies usages
   tests:
@@ -35,7 +53,12 @@ testGroup:
       status: 200
       headers:
         content-type: application/json
-        
+
+  - template: sampleTestTemplate # call test template with arguments
+    tags: ["template"]
+    arguments: 
+     args_foo_value: '["v1","v2"]' # pass variable
+               
 - name: test group to show to show how to test body asserts
   tags: ["bodyAssert"]
   tests:
@@ -63,7 +86,7 @@ testGroup:
             {
               "foo": [
                        "v1",
-                       "v3"
+                       "v2"
                      ]
             }          
         - jsonPath: args
